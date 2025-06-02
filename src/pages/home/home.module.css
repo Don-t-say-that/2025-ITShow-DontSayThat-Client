@@ -1,0 +1,27 @@
+:root  {
+  background-image: url('../../assets/Image/background.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  text-align: center;
+  font-family: 'Darumadrop One', sans-serif;
+  font-size: 10.4vw; 
+  line-height: 150px;
+  color: white;
+  margin: 0;
+}
+
+.touch {
+  font-family: 'Darumadrop One', sans-serif;
+  font-size: 4.17vw;
+  color: white;
+  margin-top: 20px;
+}
