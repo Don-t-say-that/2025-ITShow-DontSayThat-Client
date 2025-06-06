@@ -1,0 +1,50 @@
+.roomButton {
+  display: flex;
+  flex-direction: row; /* 전체 가로 정렬 */
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  width: 1221.5px;
+  height: 111px;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background-image: url('../../assets/Image/roomButton.png');
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.roomInfo {
+  margin-left: 114px;
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
+  gap: 15px;
+}
+
+.roomName {
+  font-family: 'Maplestory';
+  font-size: 3rem;
+  color: #463309;
+  font-weight: bold;
+}
+
+.roomCount {
+  font-family: 'Maplestory';
+  color: #463309;
+  font-size: 3rem;
+}
+
+.enterButton {
+  margin-right: 90px;
+  font-family: 'Maplestory';
+  font-size: 3rem;
+  color: #e79c00;
+  border: none;
+  font-weight: bold;
+  background: none;
+  cursor: pointer;
+}
