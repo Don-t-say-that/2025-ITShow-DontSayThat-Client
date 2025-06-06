@@ -13,17 +13,14 @@
 
 .title {
   position: absolute;
-  left: 10vw;  /* 기존대로 왼쪽에 10vw만큼 여백 */
+  left: 10vw;  
   text-align: center;
   font-family: 'Darumadrop One', sans-serif;
   font-size: 10.42vw;
-  line-height: 150px;
+  line-height: 9.375rem; 
   color: #F8AE01;
-  text-shadow: 
-    -17px -17px 0 #463309, 
-    17px -17px 0 #463309,  
-    -17px 17px 0 #463309, 
-    17px 17px 0 #463309;
+  -webkit-text-stroke: 1.57vw  #463309;
+  paint-order: stroke;
 }
 
 .buttonContainer {
@@ -31,5 +28,5 @@
   right: 10vw;
   display: flex;
   flex-direction: column;
-  gap: 70px;
+  gap: 4.375rem;
 }
