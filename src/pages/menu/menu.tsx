@@ -1,6 +1,6 @@
 import '../../App.css';
 import styles from './menu.module.css';
-import MenuButton from '../../components/menuButton/MenuButton';
+import MenuButton from '../../components/menuButton/MenuButton';
 import { useNavigate } from 'react-router-dom';
 
 function Menu() {
