@@ -1,0 +1,14 @@
+.textInput {
+  background-color: white;
+  border: 2px solid #ccc;
+  padding: 50px;
+  font-family: 'Maplestory';
+  font-size: 5rem;
+  outline: none;
+  box-sizing: border-box;
+  border-radius: 30px;
+}
+
+.textInput:focus {
+  border-color: white;
+}
