@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './joinGame.module.css';
 import '../../App.css';
 import RoomButton from '../../components/roomButton/RoomButton';
+import { useNavigate } from 'react-router-dom';
 
 interface Room {
   id: number;
@@ -10,6 +11,11 @@ interface Room {
 
 function JoinGame() {
   const [rooms, setRooms] = useState<Room[]>([]);
+
+  const navigate = useNavigate();
+  const handleBackgroundClick = () => {
+    navigate('/registerUser');
+  };
 
   const createRoom = () => {
     const newRoom: Room = {
@@ -23,21 +29,17 @@ function JoinGame() {
     <>
       <div className={styles.background}>
         <p className={styles.title}>게임 참가하기</p>
-
-        {/* 방 목록 */}
         <div className={styles.roomList}>
           {rooms.map((room) => (
             <RoomButton
                 key={room.id}
                 roomName={room.name}
-                currentCount={1} // 또는 임시로 Math.floor(Math.random() * 4) + 1 도 가능
+                currentCount={1}  // 임시로
                 onClick={() => alert(`${room.name} 입장!`)}
             />
             ))}
         </div>
-
-        {/* 방 생성 버튼 */}
-        <button className={styles.createRoomBtn} onClick={createRoom}>
+        <button className={styles.createRoomBtn} onClick={handleBackgroundClick}>
           +
         </button>
       </div>
