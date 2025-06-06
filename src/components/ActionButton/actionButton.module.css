@@ -1,0 +1,12 @@
+.actionButton {
+    width: 333.5px;
+    height: 80px;
+    border-radius: 30px;
+    background-color: white;
+    border: none;
+    outline: 15px solid #F8AE01;
+    font-family: 'Maplestory';
+    font-size: 50px;
+    color: #F8AE01;
+    margin-top: 80px;
+}
