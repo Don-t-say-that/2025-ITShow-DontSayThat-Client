@@ -1,0 +1,29 @@
+.background {
+  position: fixed;
+  background-image: url('../../assets/Image/blurBackground.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+    position: absolute;
+    top: 0px;
+    font-family: 'Maplestory';
+    color: #F8AE01;
+    font-size: 6.77vw;
+    -webkit-text-stroke: 1.4vw  #463309;
+    paint-order: stroke;
+}
+
+.inputContainer{
+    margin-top: 17rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
