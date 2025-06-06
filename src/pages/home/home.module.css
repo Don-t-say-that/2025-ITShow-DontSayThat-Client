@@ -1,4 +1,5 @@
-:root  {
+.background  {
+  position: fixed;
   background-image: url('../../assets/Image/background.jpg');
   background-size: cover;
   background-position: center;
@@ -23,5 +24,6 @@
   font-family: 'Darumadrop One', sans-serif;
   font-size: 4.17vw;
   color: white;
-  margin-top: 20px;
+  margin-top: 23px;
+  text-align: center;
 }
