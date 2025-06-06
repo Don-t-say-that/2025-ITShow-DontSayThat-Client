@@ -1,0 +1,24 @@
+.menuButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  width: 450px; 
+  height: 110px; 
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background-image: url('../../assets/Image/menuButton.png');
+}
+
+.content {
+  font-family:'Maplestory';
+  font-size: 3.65vw;
+  z-index: 2;
+  color: #463309;
+  font-weight: bold;
+  text-align: center;
+}
