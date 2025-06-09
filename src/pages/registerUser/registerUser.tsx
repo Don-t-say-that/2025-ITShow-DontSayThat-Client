@@ -2,13 +2,16 @@ import { useState } from 'react';
 import styles from './registerUser.module.css';
 import TextInput from '../../components/textInput/TextInput'; 
 import ActionButton from '../../components/ActionButton/ActionButton';
+import Modal from '../../components/Modal/Modal';
 import '../../App.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function RegisterUser() {
-
   const [name, setName] = useState('');
   const [password, setPassword] = useState(''); 
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -25,8 +28,16 @@ function RegisterUser() {
         password,
       });
       console.log(response.data);
-    } catch (error) {
-      console.error('사용자 등록 에러', error);
+      if (response.status === 201) {
+        navigate('/createRoom');
+      }
+      
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        setShowModal(true);
+      } else {
+        console.error('사용자 등록 에러', error);
+      }
     }
   };
 
@@ -47,9 +58,15 @@ function RegisterUser() {
             onChange={handlePasswordChange}
           />
         </div>
-        <ActionButton onClick={handleSubmit}>
-            완료
-        </ActionButton>
+
+        <ActionButton onClick={handleSubmit}>완료</ActionButton>
+
+        {showModal && (
+          <Modal onClick={() => setShowModal(false)}>
+            중복된 사용자입니다.  <br/>
+            새로운 닉네임을 입력해주세요.
+          </Modal>
+        )}
       </div>
     </>
   );
