@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import useRegisterStore from '../../store/registerStore';
 import styles from './registerUser.module.css';
 import TextInput from '../../components/textInput/TextInput'; 
 import ActionButton from '../../components/ActionButton/ActionButton';
@@ -8,9 +8,16 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function RegisterUser() {
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState(''); 
-  const [showModal, setShowModal] = useState(false);
+
+  const {
+    name,
+    password,
+    showModal,
+    setName,
+    setPassword,
+    setShowModal,
+  } = useRegisterStore();
+
   const navigate = useNavigate();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
