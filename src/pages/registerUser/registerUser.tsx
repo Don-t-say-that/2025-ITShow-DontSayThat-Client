@@ -1,4 +1,5 @@
 import useRegisterStore from '../../store/registerStore';
+import useUserStore from '../../store/userStore';
 import styles from './registerUser.module.css';
 import TextInput from '../../components/textInput/TextInput'; 
 import ActionButton from '../../components/ActionButton/ActionButton';
@@ -6,19 +7,14 @@ import Modal from '../../components/Modal/Modal';
 import '../../App.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import useModalStore from '../../store/ModalStore';
 
 function RegisterUser() {
 
-  const {
-    name,
-    password,
-    showModal,
-    setName,
-    setPassword,
-    setShowModal,
-  } = useRegisterStore();
-
+  const { name, password, setName, setPassword } = useRegisterStore();
+  const { showModal, setShowModal } = useModalStore();
   const navigate = useNavigate();
+  const { setUserId } = useUserStore();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -36,6 +32,7 @@ function RegisterUser() {
       });
       console.log(response.data);
       if (response.status === 201) {
+        setUserId(response.data.id);
         navigate('/createRoom');
       }
       
