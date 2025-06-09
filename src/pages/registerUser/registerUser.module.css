@@ -7,23 +7,24 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
 .title {
-    position: absolute;
-    top: 0px;
-    font-family: 'Maplestory';
-    color: #F8AE01;
-    font-size: 6.77vw;
-    -webkit-text-stroke: 1.4vw  #463309;
-    paint-order: stroke;
+  font-family: 'Maplestory';
+  color: #F8AE01;
+  font-size: 6.77vw;
+  -webkit-text-stroke: 1.4vw #463309;
+  paint-order: stroke;
+  margin-bottom: 5vh;
 }
 
-.inputContainer{
-    margin-top: 17rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+.inputContainer {
+  margin-top: 3vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
 }
