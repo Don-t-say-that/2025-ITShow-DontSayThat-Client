@@ -10,7 +10,7 @@ import useRoomStore from '../../store/roomStore';
 import useModalStore from '../../store/modalStore';
 
 function CreateRoom() {
-  const { roomName, setRoomName } = useRoomStore();
+  const { roomName, setRoomName, setTeamId } = useRoomStore();
   const { showModal, setShowModal } = useModalStore();
 
   const handleroomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,8 +18,8 @@ function CreateRoom() {
   };
 
   const navigate = useNavigate();
-  
-  const userId = useUserStore((state) => state.id); 
+
+  const userId = useUserStore((state) => state.id);
 
   const handleCreateRoom = async () => {
     if (!userId) {
@@ -35,7 +35,8 @@ function CreateRoom() {
 
       const createdTeam = response.data;
       console.log('생성된 팀:', createdTeam);
-      navigate('/joinGame');
+      setTeamId(createdTeam.id);
+      navigate('/waitingRoom');
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
         setShowModal(true);
@@ -57,12 +58,12 @@ function CreateRoom() {
             width="41.3vw"
           />
         </div>
-        
+
         <ActionButton onClick={handleCreateRoom}>생성하기</ActionButton>
 
         {showModal && (
           <Modal onClick={() => setShowModal(false)}>
-            게임방 이름이 중복되었습니다. <br/>
+            게임방 이름이 중복되었습니다. <br />
             다시 입력해주세요.
           </Modal>
         )}
