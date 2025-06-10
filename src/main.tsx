@@ -7,6 +7,7 @@ import Menu from './pages/menu/menu.tsx';
 import JoinGame from './pages/joinGame/joinGame.tsx';
 import RegisterUser from './pages/registerUser/registerUser.tsx';
 import CreateRoom from './pages/createRoom/createRoom.tsx';
+import WaitingRoom from './pages/waitingRoom/waitingRoom.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/joinGame" element={<JoinGame />} />
         <Route path= "/registerUser" element={<RegisterUser/> } />
         <Route path='/createRoom' element={<CreateRoom />} />
+        <Route path='/waitingRoom' element={<WaitingRoom />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
