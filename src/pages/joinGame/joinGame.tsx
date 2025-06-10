@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styles from './joinGame.module.css';
 import '../../App.css';
 import RoomButton from '../../components/roomButton/RoomButton';
@@ -14,12 +14,12 @@ interface Room {
 }
 
 function JoinGame() {
-  const { rooms, setRooms } = useRoomStore();
+  const { rooms, setRooms, setTeamId } = useRoomStore();
   const navigate = useNavigate();
   const setMode = useNavigationStore((state) => state.setMode);
 
   const handleCreateUser = () => {
-    setMode('create'); 
+    setMode('create');
     navigate('/registerUser');
   };
 
@@ -37,7 +37,7 @@ function JoinGame() {
   }, []);
 
   const handleJoinRoom = async (teamId: number) => {
-    localStorage.setItem('selectedRoomId', String(teamId));
+    setTeamId(teamId);
     setMode('join');
     navigate('/registerUser');
   };
