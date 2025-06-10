@@ -12,6 +12,9 @@ interface RoomState {
 
   rooms: Room[];
   setRooms: (rooms: Room[]) => void;
+
+  teamId: number | null;
+  setTeamId: (id: number) => void;
 }
 
 const useRoomStore = create<RoomState>((set) => ({
@@ -20,6 +23,9 @@ const useRoomStore = create<RoomState>((set) => ({
 
   rooms: [],
   setRooms: (rooms) => set({ rooms }),
+
+  teamId: null,
+  setTeamId: (id) => set({ teamId: id }),
 }));
 
 export default useRoomStore;
