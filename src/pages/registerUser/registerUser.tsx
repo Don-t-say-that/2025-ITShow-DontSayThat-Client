@@ -1,14 +1,15 @@
 import useRegisterStore from '../../store/registerStore';
 import useUserStore from '../../store/userStore';
 import useNavigationStore from '../../store/navigationStore';
+import useModalStore from '../../store/modalStore';
+import useRoomStore from '../../store/roomStore';
 import styles from './registerUser.module.css';
-import TextInput from '../../components/textInput/TextInput'; 
+import TextInput from '../../components/textInput/TextInput';
 import ActionButton from '../../components/ActionButton/ActionButton';
 import Modal from '../../components/Modal/Modal';
 import '../../App.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import useModalStore from '../../store/modalStore';
 
 function RegisterUser() {
 
@@ -17,6 +18,7 @@ function RegisterUser() {
   const navigate = useNavigate();
   const { setUserId } = useUserStore();
   const mode = useNavigationStore((state) => state.mode);
+  const roomId = useRoomStore((state) => state.teamId);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -38,7 +40,6 @@ function RegisterUser() {
         setUserId(userId);
 
         if (mode === 'join') {
-          const roomId = localStorage.getItem('selectedRoomId');
           if (roomId) {
             await axios.patch(`http://localhost:3000/users/${userId}/team`, {
               teamId: Number(roomId),
@@ -49,7 +50,7 @@ function RegisterUser() {
         if (mode === 'create') {
           navigate('/createRoom');
         } else if (mode === 'join') {
-          navigate('/joinGame');
+          navigate('/waitingRoom');
         }
       }
 
@@ -75,7 +76,7 @@ function RegisterUser() {
           />
           <TextInput
             placeholder="비밀번호 입력"
-            value={password} 
+            value={password}
             onChange={handlePasswordChange}
           />
         </div>
@@ -84,7 +85,7 @@ function RegisterUser() {
 
         {showModal && (
           <Modal onClick={() => setShowModal(false)}>
-            중복된 사용자입니다.  <br/>
+            중복된 사용자입니다.  <br />
             새로운 닉네임을 입력해주세요.
           </Modal>
         )}
