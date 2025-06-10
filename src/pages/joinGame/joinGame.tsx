@@ -4,6 +4,8 @@ import '../../App.css';
 import RoomButton from '../../components/roomButton/RoomButton';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import useRoomStore from '../../store/roomStore';
+import useNavigationStore from '../../store/navigationStore';
 
 interface Room {
   id: number;
@@ -12,8 +14,14 @@ interface Room {
 }
 
 function JoinGame() {
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const { rooms, setRooms } = useRoomStore();
   const navigate = useNavigate();
+  const setMode = useNavigationStore((state) => state.setMode);
+
+  const handleCreateUser = () => {
+    setMode('create'); 
+    navigate('/registerUser');
+  };
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -28,7 +36,9 @@ function JoinGame() {
     fetchRooms();
   }, []);
 
-  const handleCreateUser = () => {
+  const handleJoinRoom = async (teamId: number) => {
+    localStorage.setItem('selectedRoomId', String(teamId));
+    setMode('join');
     navigate('/registerUser');
   };
 
@@ -42,7 +52,7 @@ function JoinGame() {
               key={room.id}
               roomName={room.name}
               currentCount={room.userCount}
-              onClick={() => alert(`${room.name} 입장!`)}
+              onClick={() => handleJoinRoom(room.id)}
             />
           ))}
         </div>
