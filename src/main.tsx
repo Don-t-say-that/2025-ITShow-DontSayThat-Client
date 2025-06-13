@@ -9,6 +9,7 @@ import RegisterUser from './pages/registerUser/registerUser.tsx';
 import CreateRoom from './pages/createRoom/createRoom.tsx';
 import GameDescription from './pages/gameDescription/gameDescription.tsx';
 import RandomCharacter from './pages/randomCharacter/randomCharacter.tsx';
+import WaitingRoom from './pages/waitingRoom/waitingRoom.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path='/createRoom' element={<CreateRoom />} />
         <Route path='/gameDescription' element={<GameDescription/>} />
         <Route path='/randomCharacter' element={<RandomCharacter/>} />
+        <Route path='/waitingRoom' element={<WaitingRoom />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

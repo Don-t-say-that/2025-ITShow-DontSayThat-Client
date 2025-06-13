@@ -1,0 +1,57 @@
+.background {
+  position: fixed;
+  background-image: url('../../assets/Image/blurBackground.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titleContainer {
+  position: absolute;
+  left: 3.1vw;
+  display: flex;
+  align-items: center;
+  gap: 3vw;
+}
+
+.title {
+  color: white;
+  font-size: 3.1vw;
+  font-family: 'Maplestory';
+}
+
+.userContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw;
+  margin-top: 5vh;
+}
+
+.startButtonWrapper {
+  align-self: flex-end;
+  margin-right: 6.9vw;
+  margin-bottom: 8.4vh;
+}
+
+.userContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw;
+  margin-top: 5vh;
+}
+
+.box1 {
+  background-color: #E0B2B3;
+  position: absolute;
+  z-index: 100;
+  width: 385px;
+  height: 700px
+}

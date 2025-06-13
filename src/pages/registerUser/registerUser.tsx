@@ -1,13 +1,15 @@
 import useRegisterStore from '../../store/registerStore';
 import useUserStore from '../../store/userStore';
+import useNavigationStore from '../../store/navigationStore';
+import useModalStore from '../../store/modalStore';
+import useRoomStore from '../../store/roomStore';
 import styles from './registerUser.module.css';
-import TextInput from '../../components/textInput/TextInput'; 
+import TextInput from '../../components/textInput/TextInput';
 import ActionButton from '../../components/ActionButton/ActionButton';
 import Modal from '../../components/Modal/Modal';
 import '../../App.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import useModalStore from '../../store/ModalStore';
 
 function RegisterUser() {
 
@@ -15,6 +17,8 @@ function RegisterUser() {
   const { showModal, setShowModal } = useModalStore();
   const navigate = useNavigate();
   const { setUserId } = useUserStore();
+  const mode = useNavigationStore((state) => state.mode);
+  const roomId = useRoomStore((state) => state.teamId);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -30,14 +34,28 @@ function RegisterUser() {
         name,
         password,
       });
-      console.log(response.data);
+
       if (response.status === 201) {
-        setUserId(response.data.id);
-        navigate('/createRoom');
+        const userId = response.data.id;
+        setUserId(userId);
+
+        if (mode === 'join') {
+          if (roomId) {
+            await axios.patch(`http://localhost:3000/users/${userId}/team`, {
+              teamId: Number(roomId),
+            });
+          }
+        }
+
+        if (mode === 'create') {
+          navigate('/createRoom');
+        } else if (mode === 'join') {
+          navigate('/waitingRoom');
+        }
       }
-      
+
     } catch (error: any) {
-      if (error.response && error.response.status === 400) {
+      if (error.response?.status === 400) {
         setShowModal(true);
       } else {
         console.error('사용자 등록 에러', error);
@@ -58,7 +76,7 @@ function RegisterUser() {
           />
           <TextInput
             placeholder="비밀번호 입력"
-            value={password} 
+            value={password}
             onChange={handlePasswordChange}
           />
         </div>
@@ -67,7 +85,7 @@ function RegisterUser() {
 
         {showModal && (
           <Modal onClick={() => setShowModal(false)}>
-            중복된 사용자입니다.  <br/>
+            중복된 사용자입니다.  <br />
             새로운 닉네임을 입력해주세요.
           </Modal>
         )}
