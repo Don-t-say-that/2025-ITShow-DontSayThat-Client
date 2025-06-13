@@ -24,4 +24,6 @@
   color: #463309;
   font-weight: bold;
   text-align: center;
+  display: flex;
+  gap: 30vh;
 }

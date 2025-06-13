@@ -1,0 +1,58 @@
+.background {
+  position: fixed;
+  background-image: url("../../assets/Image/blurBackground.jpg");
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  /* 제목을 맨 위에 고정 */
+  position: absolute;
+  top: 1px;
+  font-family: "Maplestory";
+  color: #f8ae01;
+  font-size: 6vw;
+  -webkit-text-stroke: 1.2vw #463309;
+  paint-order: stroke;
+  z-index: 10;
+}
+
+.board {
+  /* 보드를 화면 중앙에 배치 */
+  background-image: url("../../assets/Image/board.png");
+  background-repeat: no-repeat;
+  background-size: contain; /* 이미지 비율 유지 */
+  background-position: center;
+  width: 100vw;
+  max-width: 1404px;
+  height: 80vh;
+  max-height: 929px; 
+  
+  /* 보드 안에 텍스트 배치하기 위한 설정 */
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  position: relative;
+}
+
+.content {
+  /* 보드 안쪽 텍스트들 */
+  font-family: "Maplestory";
+  font-size: 2vw;
+  color: #463309;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5vh; /* 텍스트 사이 간격 */
+  
+  /* 보드 이미지 안쪽에 맞게 패딩 */
+  padding: 3vh 4vw; /* 상하 3vh, 좌우 4vw */
+  max-width: 80%; /* 보드 너비의 80% */
+}
