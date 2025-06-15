@@ -36,6 +36,8 @@ function RegisterUser() {
       });
 
       if (response.status === 201) {
+        setUserId(response.data.id);
+        navigate('/createRoom');
         const userId = response.data.id;
         setUserId(userId);
 
@@ -50,7 +52,8 @@ function RegisterUser() {
         if (mode === 'create') {
           navigate('/createRoom');
         } else if (mode === 'join') {
-          navigate('/waitingRoom');
+          // navigate('/waitingRoom');
+          navigate('/gameDescription');
         }
       }
 

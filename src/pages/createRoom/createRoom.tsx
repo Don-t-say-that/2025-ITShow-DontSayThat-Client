@@ -36,7 +36,8 @@ function CreateRoom() {
       const createdTeam = response.data;
       console.log('생성된 팀:', createdTeam);
       setTeamId(createdTeam.id);
-      navigate('/waitingRoom');
+      // navigate('/waitingRoom');
+      navigate('/gameDescription');
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
         setShowModal(true);
