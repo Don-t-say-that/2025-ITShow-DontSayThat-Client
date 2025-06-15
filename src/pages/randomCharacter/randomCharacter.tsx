@@ -1,27 +1,19 @@
 import axios from "axios";
-import styles from './randomCharacter.module.css';
-// import { motion } from "motion/react";
+import styles from "./randomCharacter.module.css";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import useUserStore from "../../store/userStore";
-
-interface UserData {
-  id: number;
-  name: string;
-  password: string;
-  teamId: number;
-  character: {
-    id: number;
-    image: string;
-  };
-  characterId: number;
-}
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { useNavigate } from "react-router-dom";
 
 function RandomCharacter() {
   const [showImage, setShowImage] = useState(false);
-  const [imageData, setImageData] = useState<UserData | null>(null);
+  const setImage = useCharacterStore((state) => state.setImage);
+  const imgUrl = useCharacterStore((state) => state.imgUrl);
 
   const userId = useUserStore((state) => state.id);
+
+  const navigate = useNavigate();
 
   const boxAnimation = {
     start: {
@@ -34,44 +26,41 @@ function RandomCharacter() {
     },
   };
 
-  // 실제 코드
-  // useEffect(() => {
-  //   const fetchImageData = async () => {
-  //     try {
-  //       if (!userId) {
-  //         console.log("userId가 없음");
-  //         return;
-  //       }
-
-  //       const response = await axios.patch(
-  //         // `http://localhost:3000/users/${userId}/random`
-  //         `http://localhost:3000/users//random`
-  //       );
-  //       console.log("response : ", response);
-  //       setImageData(response.data);
-  //       setShowImage(true);
-  //     } catch (error) {
-  //       console.log("랜덤캐릭터 뽑기 실패", error);
-  //       setShowImage(false);
-  //     }
-  //   };
-
-  //   fetchImageData();
-  // }, [userId]);
-
-  // 예시
   useEffect(() => {
-    setShowImage(true);
-  }, []);
+    const fetchImageData = async () => {
+      try {
+        if (!userId) {
+          console.log("userId가 없음");
+          return;
+        }
+
+        const response = await axios.patch(
+          `http://localhost:3000/users/${userId}/random`
+        );
+
+        setImage(response.data.character.image);
+        setShowImage(true);
+
+        setTimeout(() => {
+          console.log("waitingRoom 으로 이동");
+          navigate("/waitingRoom");
+        }, 4000);
+
+        console.log("waitingRoom 으로 이동 실패");
+      } catch (error) {
+        console.log("랜덤캐릭터 뽑기 실패", error);
+        setShowImage(false);
+      }
+    };
+
+    fetchImageData();
+  }, [setImage, userId]);
 
   return (
     <div className={styles.background}>
-      {/* 실제 코드 */}
-      {/* {showImage && imageData?.character?.image && (
+      {showImage && imgUrl && (
         <motion.img
-          // src={imageData.character.image}
-          src="https://picsum.photos/600/600?random=1"
-          alt={`${imageData.name}의 랜덤 캐릭터`}
+          src={imgUrl}
           className="rounded-xl shadow-2xl"
           variants={boxAnimation}
           initial="start"
@@ -79,32 +68,10 @@ function RandomCharacter() {
           transition={{
             duration: 3,
             type: "spring",
-            stiffness: 110,
+            stiffness: 210,
             delay: 1,
           }}
-          style={{ width: "650px", height: "650px", objectFit: "cover" }}
-          onError={() => {
-            console.log("이미지 로드 실패");
-            setShowImage(false);
-          }}
-        />
-      )} */}
-      {/* 예시로 애니메이션 확인 */}
-      {showImage && (
-        <motion.img
-          // src={imageData.character.image}
-          src="https://picsum.photos/600/600?random=1"
-          className="rounded-xl shadow-2xl"
-          variants={boxAnimation}
-          initial="start"
-          animate="end"
-          transition={{
-            duration: 3,
-            type: "spring",
-            stiffness: 110,
-            delay: 0.5,
-          }}
-          style={{ width: "650px", height: "650px", objectFit: "cover" }}
+          style={{ width: "350px", height: "350px", objectFit: "cover" }}
           onError={() => {
             console.log("이미지 로드 실패");
             setShowImage(false);
