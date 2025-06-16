@@ -84,7 +84,9 @@ function RegisterUser() {
           />
         </div>
 
-        <ActionButton onClick={handleSubmit}>완료</ActionButton>
+        <div className={styles.buttonContainer}>
+          <ActionButton onClick={handleSubmit}>완료</ActionButton>
+        </div>
 
         {showModal && (
           <Modal onClick={() => setShowModal(false)}>

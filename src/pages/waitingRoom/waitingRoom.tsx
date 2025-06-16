@@ -7,10 +7,10 @@ import useWaitingRoomStore from '../../store/waitingStore';
 import useRoomStore from '../../store/roomStore';
 import useUserStore from '../../store/userStore';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import useSocket from '../../hooks/useSocket';
-
+import { useMemo } from 'react';
 
 type WaitingRoomUser = {
   id: number;
@@ -18,6 +18,7 @@ type WaitingRoomUser = {
   character: string;
   characterId: number;
   isLeader: boolean;
+  isReady: boolean;
 };
 
 function WaitingRoom() {
@@ -28,89 +29,79 @@ function WaitingRoom() {
 
   const teamId = useRoomStore((state) => state.teamId);
   const userId = useUserStore((state) => state.id);
-  const socket = useSocket();
-  const navigate = useNavigate();
-
-
-  const isMounted = useRef(true);
-
 
   const safeUsers = Array.isArray(users) ? users : [];
 
-  // 현재 사용자 찾기
   const currentUser = useMemo(() => {
     if (!Array.isArray(safeUsers) || userId === undefined || userId === null) return undefined;
     return safeUsers.find((user) => user.id === Number(userId));
   }, [safeUsers, userId]);
 
   const isLeader = currentUser?.isLeader;
+  const socket = useSocket();
+  const navigate = useNavigate();
+
+  const isMounted = useRef(true);
 
   useEffect(() => {
     isMounted.current = true;
+    console.log('🏠 컴포넌트 마운트됨');
+
     return () => {
       isMounted.current = false;
+      console.log('🏠 컴포넌트 언마운트됨');
     };
   }, []);
 
-  useEffect(() => {
-    let isSubscribed = true;
 
-    const loadInitialUsers = async () => {
-      if (!teamId) return;
+  const refreshUsers = useCallback(async () => {
+    if (!teamId) return;
 
-      try {
-        console.log(`사용자 목록 ${teamId}`);
-        const response = await axios.get(`http://localhost:3000/teams/${teamId}/users`);
+    try {
+      console.log(`사용자 목록 새로고침 ${teamId}`);
+      const response = await axios.get(`http://localhost:3000/teams/${teamId}/users`);
+      console.log(`새 사용자 목록:`, response.data);
 
-        if (isSubscribed && isMounted.current) {
-          const userData = Array.isArray(response.data) ? response.data : [];
-          setUsers(userData);
-        }
-      } catch (error) {
-        console.error('사용자 목록 로딩 실패', error);
+      if (isMounted.current) {
+        console.log(`setUsers 호출`, response.data);
+        const userData = Array.isArray(response.data) ? response.data : [];
+        setUsers(userData);
+        console.log(`사용자 목록 업데이트`);
+      } else {
+        console.log('컴포넌트 언마운트');
       }
-    };
-
-    if (teamId) {
-      loadInitialUsers();
+    } catch (error) {
+      console.error('사용자 목록 새로고침 실패:', error);
     }
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [teamId]);
-
+  }, [teamId, setUsers]);
 
   useEffect(() => {
-    console.log(`소켓 실행 socket: ${!!socket}, teamId: ${teamId}, userId: ${userId}`);
+    if (teamId) {
+      refreshUsers();
+    }
+  }, [teamId, refreshUsers]);
+
+  useEffect(() => {
+    console.log(`소켓 useEffect 실행 socket ${!!socket} teamId ${teamId} userId ${userId}`);
 
     if (!socket || !teamId || !userId) {
-      console.log(`소켓, teamId 또는 userId가 없어서 리턴`);
+      console.log(`소켓 또는 teamId 또는 userId가 없어서 리턴`);
       return;
     }
 
     socket.emit('joinRoom', { teamId, userId });
 
     const handleUserJoined = (userData: WaitingRoomUser) => {
+      console.log(`userJoined`, userData);
       if (isMounted.current) {
-        setUsers(prevUsers => {
-          const safePrevUsers = Array.isArray(prevUsers) ? prevUsers : [];
-          const userExists = safePrevUsers.some(user => user.id === userData.id);
-          if (userExists) {
-            return safePrevUsers;
-          }
-          return [...safePrevUsers, userData];
-        });
+        refreshUsers();
       }
     };
 
     const handleUserLeft = (userData: { userId: number }) => {
       console.log('사용자 퇴장:', userData);
       if (isMounted.current) {
-        setUsers(prevUsers => {
-          const safePrevUsers = Array.isArray(prevUsers) ? prevUsers : [];
-          return safePrevUsers.filter(user => user.id !== userData.userId);
-        });
+        refreshUsers();
       }
     };
 
@@ -122,19 +113,26 @@ function WaitingRoom() {
       }
     };
 
+    const handleCharacterSelected = (data: { userId: number; characterId: number; character: string }) => {
+      console.log('캐릭터 선택', data);
+      if (isMounted.current) {
+        setUsers(prevUsers => {
+          const safePrevUsers = Array.isArray(prevUsers) ? prevUsers : [];
+          return safePrevUsers.map(user =>
+            user.id === data.userId
+              ? { ...user, characterId: data.characterId, character: data.character }
+              : user
+          );
+        });
+      }
+    };
 
+    // 소켓 연결 상태 체크
     const handleConnect = () => {
-      console.log('소켓 재연결');
+      console.log('🔗 소켓 재연결됨');
       if (isMounted.current) {
         socket.emit('joinRoom', { teamId, userId });
-        axios.get(`http://localhost:3000/teams/${teamId}/users`)
-          .then(response => {
-            if (isMounted.current) {
-              const userData = Array.isArray(response.data) ? response.data : [];
-              setUsers(userData);
-            }
-          })
-          .catch(error => console.error('재연결 시 사용자 목록 로딩 실패:', error));
+        refreshUsers();
       }
     };
 
@@ -149,19 +147,23 @@ function WaitingRoom() {
     socket.on('userJoined', handleUserJoined);
     socket.on('userLeft', handleUserLeft);
     socket.on('usersUpdated', handleUsersUpdated);
+    socket.on('characterSelected', handleCharacterSelected);
     socket.on('connect', handleConnect);
     socket.on('disconnect', handleDisconnect);
     socket.on('error', handleError);
 
     return () => {
+      console.log('🧹 소켓 이벤트 리스너 정리');
+
       socket.off('userJoined', handleUserJoined);
       socket.off('userLeft', handleUserLeft);
       socket.off('usersUpdated', handleUsersUpdated);
+      socket.off('characterSelected', handleCharacterSelected);
       socket.off('connect', handleConnect);
       socket.off('disconnect', handleDisconnect);
       socket.off('error', handleError);
     };
-  }, [socket, teamId, userId]);
+  }, [socket, teamId, userId, setUsers, refreshUsers]);
 
   const activeUsersCount = safeUsers.filter(user => user.name !== '').length;
 
@@ -179,18 +181,25 @@ function WaitingRoom() {
       character: '',
       characterId: 0,
       isLeader: false,
+      isReady: false,
     };
   });
 
   const handleArrowClick = () => {
+    console.log('🔙 뒤로가기 버튼 클릭');
     navigate('/joinGame');
   };
 
   const handleStartGame = () => {
-    // 게임 시작 로직
-    // 게임 시작할 때 navigate 넣기
-    navigate('/chatGame')
+    console.log('🎮 게임 시작 버튼 클릭');
   };
+
+  console.log('🎯 버튼 렌더링 정보:');
+  console.log('- userId:', userId);
+  console.log('- userId !== null:', userId !== null);
+  console.log('- isLeader:', isLeader);
+  console.log('- currentUser?.isLeader:', currentUser?.isLeader);
+  console.log('- currentUser?.isReady:', currentUser?.isReady);
 
   return (
     <div className={styles.background}>
@@ -203,6 +212,7 @@ function WaitingRoom() {
         {fullUsersList.map((user, index) => (
           <UserBox
             key={index}
+            user={user}
             isEmpty={user.name === ''}
             boxIndex={index}
           />
@@ -210,9 +220,9 @@ function WaitingRoom() {
       </div>
 
       <div className={styles.startButtonWrapper}>
-        {userId !== null && currentUser && isLeader && (
+        {userId !== null && currentUser?.isLeader === true ? (
           <ActionButton onClick={handleStartGame}>게임시작</ActionButton>
-        )}
+        ) : null}
       </div>
     </div>
   );

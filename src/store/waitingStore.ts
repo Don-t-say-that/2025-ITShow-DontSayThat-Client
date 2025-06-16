@@ -1,3 +1,4 @@
+
 import { create } from 'zustand';
 
 type WaitingRoomUser = {
@@ -6,19 +7,27 @@ type WaitingRoomUser = {
   character: string;
   characterId: number;
   isLeader: boolean;
+  isReady: boolean;
 };
 
 
 interface WaitingRoomState {
   users: WaitingRoomUser[];
-  setUsers: (users: WaitingRoomUser[] | ((prevUsers: WaitingRoomUser[]) => WaitingRoomUser[])) => void;
+  setUsers: (users: WaitingRoomUser[]) => void;
+  updateUserReady: (userId: number, isReady: boolean) => void;
 }
 
 const useWaitingRoomStore = create<WaitingRoomState>((set) => ({
   users: [],
-  setUsers: (users) => set((state) => ({
-    users: typeof users === 'function' ? users(state.users) : users
-  })),
+  setUsers: (users) => set({ users }),
+  updateUserReady: (userId, isReady) => set((state) => {
+    console.log('updateUserReady 호출 전 users:', state.users);
+    const updatedUsers = state.users.map(user =>
+      user.id === userId ? { ...user, isReady } : user
+    );
+    console.log('updateUserReady 호출 후 users:', updatedUsers);
+    return { users: updatedUsers };
+  }),
 }));
 
 export default useWaitingRoomStore;
