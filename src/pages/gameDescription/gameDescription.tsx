@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ActionButton from "../../components/ActionButton/ActionButton";
 import styled from "styled-components";
+import useUserStore from "../../store/userStore";
+import useRoomStore from "../../store/roomStore";
 
 interface Room {
   id: number;
@@ -19,13 +21,18 @@ const StyledActionButton = styled(ActionButton)`
 
 function GameDescription() {
   const [rooms, setRooms] = useState<Room[]>([]);
+  const userId = useUserStore((state) => state.id);
+  const teamId = useRoomStore((state) => state.teamId);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get<Room[]>(
-          "http://localhost:3000/users/:id/team"
+        const response = await axios.patch<Room[]>(
+          `http://localhost:3000/users/${userId}/team`,
+          {
+            teamId,
+          }
         );
         setRooms(response.data);
       } catch (error) {
@@ -45,7 +52,9 @@ function GameDescription() {
       <h1 className={styles.title}>게임 방법</h1>
       <div className={styles.board}>
         <div className={styles.content}>
-          <div><big>"쉿!</big> 말하지 마. 그 단어는... 금지야!"</div>
+          <div>
+            <big>"쉿!</big> 말하지 마. 그 단어는... 금지야!"
+          </div>
           <div>
             누군가 당신의 입에 테이프를 붙였습니다.
             <br />
@@ -64,7 +73,9 @@ function GameDescription() {
         </div>
       </div>
       <div style={{ marginTop: "3vh" }}>
-        <StyledActionButton onClick={handleMoveChatRoom}>입장하기</StyledActionButton>
+        <StyledActionButton onClick={handleMoveChatRoom}>
+          입장하기
+        </StyledActionButton>
       </div>
     </div>
   );
