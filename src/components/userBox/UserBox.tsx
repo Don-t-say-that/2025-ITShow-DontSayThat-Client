@@ -7,11 +7,10 @@ interface WaitingRoomUser {
     name: string;
     character?: string;
     isLeader: boolean;
-    isReady: boolean;
 }
 
 interface UserBoxProps {
-    user: WaitingRoomUser;
+    user?: WaitingRoomUser; // user를 선택적 속성으로 변경
     isEmpty: boolean;
     boxIndex: number;
 }
@@ -23,7 +22,7 @@ function UserBox({ user, isEmpty, boxIndex }: UserBoxProps) {
     const boxColor = boxColors[boxIndex];
     const LineColor = LineColors[boxIndex];
 
-    if (isEmpty) {
+    if (isEmpty || !user) {
         return <div className={styles.userBox} style={{ backgroundColor: boxColor }}></div>;
     }
 
@@ -48,8 +47,6 @@ function UserBox({ user, isEmpty, boxIndex }: UserBoxProps) {
             <div className={styles.statusContainer}>
                 {user.isLeader ? (
                     <FaCrown size={66} className={styles.crownIcon} />
-                ) : user.isReady ? (
-                    <GoCheckCircleFill className={styles.checkIcon} />
                 ) : null}
             </div>
         </div>
