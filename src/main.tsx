@@ -11,6 +11,7 @@ import GameDescription from './pages/gameDescription/gameDescription.tsx';
 import RandomCharacter from './pages/randomCharacter/randomCharacter.tsx';
 import WaitingRoom from './pages/waitingRoom/waitingRoom.tsx';
 import ChatGame from './pages/chatGame/chatGame.tsx';
+import EnterForbbiden from './pages/enterForbbiden/enterForbidden.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path='/randomCharacter' element={<RandomCharacter/>} />
         <Route path='/waitingRoom' element={<WaitingRoom />} />
         <Route path='/chatGame' element={<ChatGame />} />
+        <Route path='/enterForbbiden' element={<EnterForbbiden />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

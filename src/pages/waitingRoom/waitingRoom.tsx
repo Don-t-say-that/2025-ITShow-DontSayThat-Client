@@ -45,13 +45,20 @@ function WaitingRoom() {
 
   useEffect(() => {
     isMounted.current = true;
-    console.log('🏠 컴포넌트 마운트됨');
+    console.log('컴포넌트 마운트');
 
     return () => {
       isMounted.current = false;
-      console.log('🏠 컴포넌트 언마운트됨');
+      console.log('컴포넌트 언마운트');
     };
   }, []);
+
+
+   const handleStartGame = () => {
+      if (!socket || !teamId) return;
+      console.log('게임 시작');
+      socket.emit('startGame', { teamId });
+    };
 
 
   const refreshUsers = useCallback(async () => {
@@ -74,6 +81,22 @@ function WaitingRoom() {
       console.error('사용자 목록 새로고침 실패:', error);
     }
   }, [teamId, setUsers]);
+
+  useEffect(() => {
+    if (!socket || !teamId || !userId) return;
+
+    const handleGoToForbidden = () => {
+      console.log('모든 유저 /enterForbbiden 이동');
+      navigate('/enterForbbiden');
+    };
+
+    socket.on('goToForbidden', handleGoToForbidden);
+
+    return () => {
+      socket.off('goToForbidden', handleGoToForbidden);
+    };
+  }, [socket, teamId, userId, navigate]);
+
 
   useEffect(() => {
     if (teamId) {
@@ -127,9 +150,8 @@ function WaitingRoom() {
       }
     };
 
-    // 소켓 연결 상태 체크
     const handleConnect = () => {
-      console.log('🔗 소켓 재연결됨');
+      console.log('소켓 재연결');
       if (isMounted.current) {
         socket.emit('joinRoom', { teamId, userId });
         refreshUsers();
@@ -153,8 +175,6 @@ function WaitingRoom() {
     socket.on('error', handleError);
 
     return () => {
-      console.log('🧹 소켓 이벤트 리스너 정리');
-
       socket.off('userJoined', handleUserJoined);
       socket.off('userLeft', handleUserLeft);
       socket.off('usersUpdated', handleUsersUpdated);
@@ -186,13 +206,10 @@ function WaitingRoom() {
   });
 
   const handleArrowClick = () => {
-    console.log('🔙 뒤로가기 버튼 클릭');
+    console.log('뒤로가기');
     navigate('/joinGame');
   };
 
-  const handleStartGame = () => {
-    console.log('🎮 게임 시작 버튼 클릭');
-  };
 
   console.log('🎯 버튼 렌더링 정보:');
   console.log('- userId:', userId);
