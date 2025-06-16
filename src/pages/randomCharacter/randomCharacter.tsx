@@ -42,11 +42,9 @@ function RandomCharacter() {
         setShowImage(true);
 
         setTimeout(() => {
-          console.log("waitingRoom 으로 이동");
           navigate("/waitingRoom");
         }, 4000);
 
-        console.log("waitingRoom 으로 이동 실패");
       } catch (error) {
         console.log("랜덤캐릭터 뽑기 실패", error);
         setShowImage(false);

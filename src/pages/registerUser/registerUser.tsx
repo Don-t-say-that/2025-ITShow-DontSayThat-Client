@@ -39,7 +39,7 @@ function RegisterUser() {
         setUserId(response.data.id);
         navigate('/createRoom');
         const userId = response.data.id;
-        setUserId(userId);
+        console.log("regsterUser", userId);
 
         if (mode === 'join') {
           if (roomId) {

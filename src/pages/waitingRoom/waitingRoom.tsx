@@ -188,6 +188,8 @@ function WaitingRoom() {
 
   const handleStartGame = () => {
     // 게임 시작 로직
+    // 게임 시작할 때 navigate 넣기
+    navigate('/chatGame')
   };
 
   return (
