@@ -1,0 +1,84 @@
+.background {
+  position: fixed;
+  background-size: cover;
+  background-position: center;
+  background-image: url("../../assets/Image/gameBackground/gameBg4.png");
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.timer {
+  position: fixed;
+  width: 300px;
+  height: 80px;
+  border-radius: 30px;
+  background-color: white;
+  border: none;
+  outline: 15px solid #f8ae01;
+  font-family: "Maplestory";
+  font-weight: 700;
+  font-size: 50px;
+  color: #f8ae01;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 9vh;
+  right: 5vw;
+  box-shadow: 17px 20px 10px #0000006b;
+}
+
+.chat {
+  position: fixed;
+  top: 23vh;
+  right: 4vw;
+  width: 21vw;
+  height: 50vh;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.6); 
+  border-radius: 20px;
+  box-shadow: 5px 5px 10px #0000004b;
+  font-family: "Maplestory";
+  font-size: 20px;
+  color: #000;
+}
+
+.inputWrapper {
+  position: fixed;
+  bottom: 9vh;
+  width: 50vw;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 7px;
+  background-color: #ffff;
+  padding-left: 1vw;
+  border-radius: 15px;
+  border: none;
+  box-shadow: 5px 5px 7px #0000006b;
+}
+
+.input {
+  font-family: "Maplestory";
+  font-size: 30px;
+  border: none;
+  width: 45vw;
+  height: 4vh;
+  border: none;
+}
+
+.input:focus {outline: none;}
+
+.sendButton {
+  border: none;
+  background: none;
+}
