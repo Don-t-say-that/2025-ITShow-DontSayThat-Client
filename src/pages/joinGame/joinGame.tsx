@@ -48,12 +48,23 @@ function JoinGame() {
       setRooms((prevTeams: any[]) => prevTeams.filter(team => team.id !== teamId));
     };
 
+    const handleUserCountUpdated = ({ teamId, userCount }: { teamId: number; userCount: number }) => {
+      console.log(`팀 ${teamId} 유저 수 변경됨: ${userCount}`);
+      setRooms((prevRooms) =>
+        prevRooms.map((room) =>
+          room.id === teamId ? { ...room, userCount } : room
+        )
+      );
+    };
+
     socket.on('teamCreated', handleTeamCreated);
     socket.on('teamDeleted', handleTeamDeleted);
+    socket.on('userCountUpdated', handleUserCountUpdated);
 
     return () => {
       socket.off('teamCreated', handleTeamCreated);
       socket.off('teamDeleted', handleTeamDeleted);
+      socket.off('userCountUpdated', handleUserCountUpdated);
     };
   }, [setRooms, socket]);
 

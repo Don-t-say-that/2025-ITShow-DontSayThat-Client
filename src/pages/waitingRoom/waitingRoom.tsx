@@ -69,7 +69,7 @@ function WaitingRoom() {
         console.log('방 나가기 소켓 실행');
         socket.emit('userLeft', { teamId, userId });
 
-        await new Promise((resolve) => setTimeout(resolve, 200));  // 소켓 전송 시간
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
 
       console.log('서버에 퇴장 요청');
@@ -77,7 +77,6 @@ function WaitingRoom() {
 
       console.log('게임 목록으로 이동');
       navigate('/joinGame');
-
     } catch (error) {
       console.error('게임 방 나가기 실패', error);
       navigate('/joinGame');
@@ -93,12 +92,9 @@ function WaitingRoom() {
       console.log(`새 사용자 목록:`, response.data);
 
       if (isMounted.current) {
-        console.log(`setUsers 호출`, response.data);
         const userData = Array.isArray(response.data.userTeam) ? response.data.userTeam : [];
-        setUsers(userData);
+        setUsers(userData); // 새로운 사용자 목록으로 업데이트
         setBackgroundImage(response.data.backgroundImage);
-
-        console.log(`사용자 목록 업데이트`);
       } else {
         console.log('컴포넌트 언마운트');
       }
@@ -106,6 +102,7 @@ function WaitingRoom() {
       console.error('사용자 목록 새로고침 실패:', error);
     }
   }, [teamId, setUsers]);
+
 
   useEffect(() => {
     if (!socket || !teamId || !userId) return;
@@ -177,6 +174,7 @@ function WaitingRoom() {
         setUsers(userData);
       }
     };
+
 
     const handleCharacterSelected = (data: { userId: number; characterId: number; character: string }) => {
       console.log('캐릭터 선택', data);
