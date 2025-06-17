@@ -11,7 +11,7 @@ interface RoomState {
   setRoomName: (name: string) => void;
 
   rooms: Room[];
-  setRooms: (rooms: Room[]) => void;
+  setRooms: (rooms: Room[] | ((prevRooms: Room[]) => Room[])) => void;
 
   teamId: number | null;
   setTeamId: (id: number) => void;
@@ -22,7 +22,13 @@ const useRoomStore = create<RoomState>((set) => ({
   setRoomName: (name) => set({ roomName: name }),
 
   rooms: [],
-  setRooms: (rooms) => set({ rooms }),
+  setRooms: (roomsOrUpdater) =>
+  set((state) => ({
+    rooms:
+      typeof roomsOrUpdater === 'function'
+        ? roomsOrUpdater(state.rooms)
+        : roomsOrUpdater,
+  })),
 
   teamId: null,
   setTeamId: (id) => set({ teamId: id }),

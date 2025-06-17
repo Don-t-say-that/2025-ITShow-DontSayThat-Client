@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useRoomStore from '../../store/roomStore';
 import useNavigationStore from '../../store/navigationStore';
+import useSocket from '../../hooks/useSocket';
 
 interface Room {
   id: number;
@@ -17,12 +18,14 @@ function JoinGame() {
   const { rooms, setRooms, setTeamId } = useRoomStore();
   const navigate = useNavigate();
   const setMode = useNavigationStore((state) => state.setMode);
+  const socket = useSocket();
 
   const handleCreateUser = () => {
     setMode('create');
     navigate('/registerUser');
   };
 
+  
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -34,7 +37,20 @@ function JoinGame() {
     };
 
     fetchRooms();
-  }, []);
+
+    const handleTeamCreated = (newRoom: Room) => {
+      console.log('새 팀 생성', newRoom);
+      setRooms((prevRooms) => [...prevRooms, newRoom]);
+    };
+
+    socket.on('teamCreated', handleTeamCreated);
+
+    return () => {
+      socket.off('teamCreated', handleTeamCreated);
+    };
+  }, [setRooms, socket]);
+
+
 
   const handleJoinRoom = async (teamId: number) => {
     setTeamId(teamId);
