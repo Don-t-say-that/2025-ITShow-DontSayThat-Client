@@ -15,16 +15,21 @@ import { useNavigate } from 'react-router-dom';
 function RegisterUser() {
 
   const { name, password, setName, setPassword } = useRegisterStore();
-  const { showModal, setShowModal } = useModalStore();
+  const {
+    showModal,
+    setShowModal,
+    showSuccessModal,
+    setShowSuccessModal
+  } = useModalStore();
   const navigate = useNavigate();
   const { setUserId } = useUserStore();
   const mode = useNavigationStore((state) => state.mode);
   const roomId = useRoomStore((state) => state.teamId);
 
-   useEffect(() => {
-      setName('');
-      setPassword('');
-    }, [setName, setPassword]);
+  useEffect(() => {
+    setName('');
+    setPassword('');
+  }, [setName, setPassword]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -43,7 +48,7 @@ function RegisterUser() {
 
       if (response.status === 201) {
         setUserId(response.data.id);
-        navigate('/createRoom');
+        setShowSuccessModal(true);
         const userId = response.data.id;
         console.log("regsterUser", userId);
 
@@ -53,13 +58,6 @@ function RegisterUser() {
               teamId: Number(roomId),
             });
           }
-        }
-
-        if (mode === 'create') {
-          navigate('/createRoom');
-        } else if (mode === 'join') {
-          // navigate('/waitingRoom');
-          navigate('/gameDescription');
         }
       }
 
@@ -100,6 +98,19 @@ function RegisterUser() {
             새로운 닉네임을 입력해주세요.
           </Modal>
         )}
+        {showSuccessModal && (
+          <Modal onClick={() => {
+            setShowSuccessModal(false);
+            if (mode === 'create') {
+              navigate('/createRoom');
+            } else if (mode === 'join') {
+              navigate('/gameDescription');
+            }
+          }}>
+            성공적으로 로그인되었습니다.
+          </Modal>
+        )}
+
       </div>
     </>
   );
