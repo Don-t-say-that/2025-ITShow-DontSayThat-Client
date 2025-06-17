@@ -26,6 +26,7 @@ function WaitingRoom() {
     users: WaitingRoomUser[];
     setUsers: (users: WaitingRoomUser[] | ((prevUsers: WaitingRoomUser[]) => WaitingRoomUser[])) => void;
   };
+  const { setBackgroundImage } = useRoomStore.getState();
 
   const teamId = useRoomStore((state) => state.teamId);
   const userId = useUserStore((state) => state.id);
@@ -71,8 +72,10 @@ function WaitingRoom() {
 
       if (isMounted.current) {
         console.log(`setUsers 호출`, response.data);
-        const userData = Array.isArray(response.data) ? response.data : [];
+        const userData = Array.isArray(response.data.userTeam) ? response.data.userTeam : [];
         setUsers(userData);
+        setBackgroundImage(response.data.backgroundImage);
+
         console.log(`사용자 목록 업데이트`);
       } else {
         console.log('컴포넌트 언마운트');
@@ -209,7 +212,6 @@ function WaitingRoom() {
     console.log('뒤로가기');
     navigate('/joinGame');
   };
-
 
   console.log('🎯 버튼 렌더링 정보:');
   console.log('- userId:', userId);

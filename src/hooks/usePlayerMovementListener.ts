@@ -6,8 +6,7 @@ export function usePlayerMovementListener() {
   const updatePlayer = useMultiplayerStore((state) => state.updatePlayer);
 
   useEffect(() => {
-    socket.on("usePlayerMovementListener : player-moved", (data) => {
-      console.log("player-moved 수신", data);
+    socket.on("player-moved", (data) => {
       updatePlayer({
         id: data.playerId,
         x: data.x,
