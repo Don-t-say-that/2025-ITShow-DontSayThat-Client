@@ -11,6 +11,8 @@ import { useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import useSocket from '../../hooks/useSocket';
 import { useMemo } from 'react';
+import useModalStore from '../../store/modalStore';
+import Modal from '../../components/Modal/Modal';
 
 type WaitingRoomUser = {
   id: number;
@@ -30,7 +32,8 @@ function WaitingRoom() {
 
   const teamId = useRoomStore((state) => state.teamId);
   const userId = useUserStore((state) => state.id);
-
+  const { showModal, setShowModal } = useModalStore();
+  
   const safeUsers = Array.isArray(users) ? users : [];
 
   const currentUser = useMemo(() => {
@@ -57,6 +60,14 @@ function WaitingRoom() {
 
   const handleStartGame = () => {
     if (!socket || !teamId) return;
+
+    const activeUsersCount = safeUsers.filter(user => user.name !== '').length; // 현재 사용자 수
+
+    if (activeUsersCount <= 1) {
+      setShowModal(true);
+      return;
+    }
+
     console.log('게임 시작');
     socket.emit('startGame', { teamId });
   };
@@ -283,6 +294,13 @@ function WaitingRoom() {
           <p className={styles.waitingText}>방장의 게임 시작을 기다려주세요!</p>
         )}
       </div>
+
+        {showModal && (
+        <Modal onClick={() => setShowModal(false)}>
+          혼자서는 게임을 시작할 수 없습니다. <br />
+          다른 사용자를 기다려주세요!
+        </Modal>
+      )}
 
     </div>
   );
