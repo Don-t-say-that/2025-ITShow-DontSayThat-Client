@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import useRegisterStore from '../../store/registerStore';
 import useUserStore from '../../store/userStore';
 import useNavigationStore from '../../store/navigationStore';
@@ -19,6 +20,11 @@ function RegisterUser() {
   const { setUserId } = useUserStore();
   const mode = useNavigationStore((state) => state.mode);
   const roomId = useRoomStore((state) => state.teamId);
+
+   useEffect(() => {
+      setName('');
+      setPassword('');
+    }, [setName, setPassword]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);

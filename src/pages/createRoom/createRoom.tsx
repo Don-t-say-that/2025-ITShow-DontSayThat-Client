@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import styles from './createRoom.module.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -18,8 +19,11 @@ function CreateRoom() {
   };
 
   const navigate = useNavigate();
-
   const userId = useUserStore((state) => state.id);
+
+  useEffect(() => {
+    setRoomName('');
+  }, [setRoomName]);
 
   const handleCreateRoom = async () => {
     if (!userId) {
