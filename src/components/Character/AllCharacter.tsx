@@ -8,7 +8,6 @@ function AllCharacters() {
     <>
       {Object.values(players).map(
         (player) => (
-          console.log('Allcharacter: ', player.imgUrl),
           (
             <img
               key={player.id}
@@ -17,8 +16,8 @@ function AllCharacters() {
               style={{
                 position: "absolute",
                 transform: `translate(${player.x}px, ${player.y}px)`,
-                width: "100px",
-                height: "100px",
+                width: "250px",
+                height: "250px",
                 transition: "0.15s ease-out",
                 userSelect: "none",
                 zIndex: player.id === myPlayerId ? 10 : 1
