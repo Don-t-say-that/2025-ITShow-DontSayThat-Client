@@ -62,27 +62,27 @@ function WaitingRoom() {
   };
 
 
-  
-const exitTeam = async () => {
-  try {
-    if (socket && teamId && userId) {
-      console.log('방 나가기 소켓 실행');
-      socket.emit('userLeft', { teamId, userId });
-      
-      await new Promise((resolve) => setTimeout(resolve, 200));  // 소켓 전송 시간
-    }
-    
-    console.log('서버에 퇴장 요청');
-    await axios.patch(`http://localhost:3000/teams/${userId}/users`);
 
-    console.log('게임 목록으로 이동');
-    navigate('/joinGame');
-    
-  } catch (error) {
-    console.error('게임 방 나가기 실패', error);
-    navigate('/joinGame');
-  }
-};
+  const exitTeam = async () => {
+    try {
+      if (socket && teamId && userId) {
+        console.log('방 나가기 소켓 실행');
+        socket.emit('userLeft', { teamId, userId });
+
+        await new Promise((resolve) => setTimeout(resolve, 200));  // 소켓 전송 시간
+      }
+
+      console.log('서버에 퇴장 요청');
+      await axios.patch(`http://localhost:3000/teams/${userId}/users`);
+
+      console.log('게임 목록으로 이동');
+      navigate('/joinGame');
+
+    } catch (error) {
+      console.error('게임 방 나가기 실패', error);
+      navigate('/joinGame');
+    }
+  };
 
   const refreshUsers = useCallback(async () => {
     if (!teamId) return;
@@ -281,8 +281,11 @@ const exitTeam = async () => {
       <div className={styles.startButtonWrapper}>
         {userId !== null && currentUser?.isLeader === true ? (
           <ActionButton onClick={handleStartGame}>게임시작</ActionButton>
-        ) : null}
+        ) : (
+          <p className={styles.waitingText}>방장의 게임 시작을 기다려주세요!</p>
+        )}
       </div>
+
     </div>
   );
 }

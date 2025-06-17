@@ -55,3 +55,11 @@
   width: 385px;
   height: 700px
 }
+
+.waitingText{
+  font-family: 'Maplestory';
+  color: white;
+  font-size: 2vw;
+  text-align: center;
+  margin-top: 1vw;
+}
