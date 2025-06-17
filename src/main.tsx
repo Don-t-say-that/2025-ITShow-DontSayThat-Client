@@ -13,6 +13,7 @@ import WaitingRoom from './pages/waitingRoom/waitingRoom.tsx';
 import ChatGame from './pages/chatGame/chatGame.tsx';
 import EnterForbbiden from './pages/enterForbbiden/enterForbidden.tsx';
 import GameResult from './pages/gameResult/gameResult.tsx';
+import Ranking from './pages/ranking/ranking.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -29,6 +30,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path='/chatGame' element={<ChatGame />} />
         <Route path='/enterForbbiden' element={<EnterForbbiden />} />
         <Route path='/gameResult' element={<GameResult />} />
+        <Route path='/ranking' element={<Ranking />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
