@@ -1,6 +1,6 @@
+import { div } from 'motion/react-client';
 import styles from './UserBox.module.css';
 import { FaCrown } from "react-icons/fa";
-import { GoCheckCircleFill } from "react-icons/go";
 
 interface WaitingRoomUser {
     id: number;
@@ -46,7 +46,9 @@ function UserBox({ user, isEmpty, boxIndex }: UserBoxProps) {
 
             <div className={styles.statusContainer}>
                 {user.isLeader ? (
-                    <FaCrown size={66} className={styles.crownIcon} />
+                    <div className={styles.crown}>
+                        <FaCrown size={55}/>
+                    </div>
                 ) : null}
             </div>
         </div>

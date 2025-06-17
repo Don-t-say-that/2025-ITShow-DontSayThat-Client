@@ -9,15 +9,15 @@
 }
 
 .headerLine {
-    position: absolute;
-    top: 0;
-    height: 10px;
-    width: 100%;
+  position: absolute;
+  top: 0;
+  height: 10px;
+  width: 100%;
 }
 
 .userHeader {
   margin-top: 23px;
-  background-color:rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   height: 5vh;
   width: 100%;
   display: flex;
@@ -63,11 +63,8 @@
   border-radius: 50%;
 }
 
-.crownIcon {
+.crown {
   color: gold;
-}
-
-.checkIcon {
-  font-size: 3.4vw;
-  color: #4CAF50;
+  margin-bottom: 3.7vh;
+  margin-left: 2.5vw;
 }
