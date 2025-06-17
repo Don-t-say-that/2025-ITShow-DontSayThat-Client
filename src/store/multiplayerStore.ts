@@ -1,10 +1,12 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface Player {
   id: string;
   x: number;
   y: number;
   imgUrl: string;
+  nickName: string;
+  message?: string;
 }
 
 interface MultiplayerStore {
@@ -14,19 +16,20 @@ interface MultiplayerStore {
   updatePlayer: (player: Player) => void;
   removePlayer: (id: string) => void;
   setInitialPlayers: (players: Player[]) => void;
+  updatePlayerMessage: (id: string, message: string) => void;
 }
 
 export const useMultiplayerStore = create<MultiplayerStore>((set) => ({
   players: {},
   myPlayerId: null,
   setMyPlayerId: (id) => set({ myPlayerId: id }),
-  updatePlayer: (player) =>
-    set((state) => ({
-      players: {
-        ...state.players,
-        [player.id]: player,
-      },
-    })),
+  updatePlayer(data) {
+    set((state) => {
+      const players = { ...state.players };
+      players[data.id] = { ...players[data.id], ...data }; // 덮어쓰기
+      return { players };
+    });
+  },
   removePlayer: (id) =>
     set((state) => {
       const newPlayers = { ...state.players };
@@ -39,5 +42,30 @@ export const useMultiplayerStore = create<MultiplayerStore>((set) => ({
       playerMap[p.id] = p;
     });
     set({ players: playerMap });
+  },
+  updatePlayerMessage: (id: string, message: string) => {
+    set((state) => {
+      const player = state.players[id];
+      if (!player) return state;
+      return {
+        players: {
+          ...state.players,
+          [id]: { ...player, message },
+        },
+      };
+    });
+
+    setTimeout(() => {
+      set((state) => {
+        const player = state.players[id];
+        if (!player) return state;
+        return {
+          players: {
+            ...state.players,
+            [id]: { ...player, message: "" },
+          },
+        };
+      });
+    }, 3000);
   },
 }));
