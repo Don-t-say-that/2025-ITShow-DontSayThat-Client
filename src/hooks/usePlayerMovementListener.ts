@@ -6,6 +6,7 @@ export function usePlayerMovementListener() {
 
   useEffect(() => {
     socket.on("player-moved", (data) => {
+
       useMultiplayerStore.getState().updatePlayer({
         ...data,    // id, x, y, imageUrl, nickName
         message: data.message ?? "",

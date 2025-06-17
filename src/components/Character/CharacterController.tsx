@@ -4,7 +4,6 @@ import { socket } from "../../sockets/socket";
 import { useMultiplayerStore } from "../../store/multiplayerStore";
 import useRoomStore from "../../store/roomStore";
 
-
 // 유효 범위 내로 값을 고정하는 함수
 const clamp = (value: number, min: number, max: number) =>
   Math.max(min, Math.min(value, max));
@@ -55,7 +54,7 @@ function CharacterController({ playerId }: { playerId: string }) {
       setPosition(clampedX, clampedY);
 
       socket.emit("move", {
-        playerId,
+        id: playerId,
         x: clampedX,
         y: clampedY,
         imgUrl,

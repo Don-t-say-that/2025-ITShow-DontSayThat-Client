@@ -116,7 +116,6 @@ function ChatGame() {
   }
 }, [assignedPosition, userId, teamId, imgUrl]);
 
-
   return (
     <div
       className={styles.background}
