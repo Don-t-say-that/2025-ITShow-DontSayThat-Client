@@ -25,7 +25,7 @@ function JoinGame() {
     navigate('/registerUser');
   };
 
-  
+
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -43,10 +43,17 @@ function JoinGame() {
       setRooms((prevRooms) => [...prevRooms, newRoom]);
     };
 
+    const handleTeamDeleted = ({ teamId }: { teamId: number }) => {
+      console.log('팀 삭제됨:', teamId);
+      setRooms((prevTeams: any[]) => prevTeams.filter(team => team.id !== teamId));
+    };
+
     socket.on('teamCreated', handleTeamCreated);
+    socket.on('teamDeleted', handleTeamDeleted);
 
     return () => {
       socket.off('teamCreated', handleTeamCreated);
+      socket.off('teamDeleted', handleTeamDeleted);
     };
   }, [setRooms, socket]);
 

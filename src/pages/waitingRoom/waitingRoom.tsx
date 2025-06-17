@@ -55,12 +55,34 @@ function WaitingRoom() {
   }, []);
 
 
-   const handleStartGame = () => {
-      if (!socket || !teamId) return;
-      console.log('게임 시작');
-      socket.emit('startGame', { teamId });
-    };
+  const handleStartGame = () => {
+    if (!socket || !teamId) return;
+    console.log('게임 시작');
+    socket.emit('startGame', { teamId });
+  };
 
+
+  
+const exitTeam = async () => {
+  try {
+    if (socket && teamId && userId) {
+      console.log('방 나가기 소켓 실행');
+      socket.emit('userLeft', { teamId, userId });
+      
+      await new Promise((resolve) => setTimeout(resolve, 200));  // 소켓 전송 시간
+    }
+    
+    console.log('서버에 퇴장 요청');
+    await axios.patch(`http://localhost:3000/teams/${userId}/users`);
+
+    console.log('게임 목록으로 이동');
+    navigate('/joinGame');
+    
+  } catch (error) {
+    console.error('게임 방 나가기 실패', error);
+    navigate('/joinGame');
+  }
+};
 
   const refreshUsers = useCallback(async () => {
     if (!teamId) return;
@@ -100,6 +122,23 @@ function WaitingRoom() {
     };
   }, [socket, teamId, userId, navigate]);
 
+  useEffect(() => {
+    if (!socket || !teamId) return;
+
+    const handleTeamDeleted = ({ teamId: deletedTeamId }: { teamId: number }) => {
+      console.log('팀 삭제됨:', deletedTeamId);
+      if (deletedTeamId === teamId) {
+        console.log('현재 팀이 삭제되어 게임 목록으로 이동');
+        navigate('/joinGame');
+      }
+    };
+
+    socket.on('teamDeleted', handleTeamDeleted);
+
+    return () => {
+      socket.off('teamDeleted', handleTeamDeleted);
+    };
+  }, [socket, teamId, navigate]);
 
   useEffect(() => {
     if (teamId) {
@@ -210,6 +249,7 @@ function WaitingRoom() {
 
   const handleArrowClick = () => {
     console.log('뒤로가기');
+    exitTeam();
     navigate('/joinGame');
   };
 
