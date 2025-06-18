@@ -16,7 +16,7 @@ import GameResult from './pages/gameResult/gameResult.tsx';
 import Ranking from './pages/ranking/ranking.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -33,5 +33,5 @@ createRoot(document.getElementById('root')!).render(
         <Route path='/ranking' element={<Ranking />} />
       </Routes>
     </BrowserRouter>
-  </StrictMode>
+  // </StrictMode>
 );

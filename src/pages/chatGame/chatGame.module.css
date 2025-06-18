@@ -11,6 +11,16 @@
   align-items: center;
 }
 
+.title {
+  position: absolute;
+  top:0px;
+  font-family: 'Maplestory';
+  color: #F8AE01;
+  font-size: 6.77vw;
+  -webkit-text-stroke: 1.4vw  #463309;
+  paint-order: stroke;
+}
+
 .timer {
   position: fixed;
   width: 300px;
@@ -55,14 +65,14 @@
   position: fixed;
   bottom: 9vh;
   width: 50vw;
-  height: 5vh;
+  height: 7vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 7px;
+  padding: 7px 10px;
   background-color: #ffff;
   padding-left: 1vw;
-  border-radius: 15px;
+  border-radius: 25px;
   border: none;
   box-shadow: 5px 5px 7px #0000006b;
 }
@@ -72,7 +82,7 @@
   font-size: 30px;
   border: none;
   width: 45vw;
-  height: 4vh;
+  height: 7vh;
   border: none;
 }
 

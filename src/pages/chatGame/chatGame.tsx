@@ -14,14 +14,27 @@ import useRoomStore from "../../store/roomStore";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { useMultiplayerStore } from "../../store/multiplayerStore";
 import axios from "axios";
+import useModalStore from "../../store/modalStore";
+import Modal from "../../components/Modal/Modal";
+import { useChatListener } from "../../hooks/useChatListener.ts";
 
 function ChatGame() {
   usePlayerMovementListener(); // 플레이어 움직임 감지 후 업데이트
+  useChatListener();
+
   const [backgroundImage, setBackGroundImage] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [userScore, setUserScore] = useState(0);
+  const [hasFinished, setHasFinished] = useState(false);
   const userId = useUserStore((state) => state.id);
   const teamId = useRoomStore((state) => state.teamId);
   const randomImage = useRoomStore((state) => state.backgroundImage);
   const { imgUrl, nickName } = useCharacterStore();
+  const { showModal, setShowModal } = useModalStore();
+  const [timer, setTimer] = useState(90);
+  const [gameEnded, setGameEnded] = useState(false);
+  const [message, setMessage] = useState("");
+
   const bgMap: { [key: string]: string } = {
     gameBg1: bg1,
     gameBg2: bg2,
@@ -41,13 +54,10 @@ function ChatGame() {
     { x: 410, y: 110 }, // 오른쪽 (1920 - 500 = 1420이 최대이므로 안전)
   ];
 
-  const [timer, setTimer] = useState(90);
-  const [gameEnded, setGameEnded] = useState(false);
-  const [message, setMessage] = useState("");
-
   const handleSendMessage = () => {
     if (!message.trim()) return;
-    console.log("savedMessage:", message);
+
+    setIsSending(true);
 
     socket.emit(
       "chat",
@@ -58,9 +68,49 @@ function ChatGame() {
       },
       () => {
         setMessage("");
+        setIsSending(false);
       }
     );
   };
+
+  // 3. 컴포넌트 언마운트 시 소켓 정리
+  useEffect(() => {
+    return () => {
+      // 모든 소켓 리스너 정리
+      socket.off("timer");
+      socket.off("gameEnd");
+      socket.off("chat");
+    };
+  }, []);
+
+  const handleFinishedGame = async () => {
+    if (hasFinished) return;
+    setHasFinished(true); // 실행 됐으면 재실행 방지
+
+    try {
+      await axios.patch(`http://localhost:3000/teams/${teamId}/finish`);
+
+      const { data } = await axios.get(
+        `http://localhost:3000/teams/${userId}/${teamId}/result`
+      );
+      console.log(data);
+
+      setUserScore(data?.score);
+      setGameEnded(true);
+      setShowModal(true);
+    } catch (error) {
+      console.error("게임 종료로 상태 변경, 모달 열기 실패", error);
+      alert("게임 상태 변경, 모달 열기 실패");
+    }
+  };
+
+  useEffect(() => {
+    console.log("✅ ChatGame mounted");
+
+    return () => {
+      console.log("❌ ChatGame unmounted");
+    };
+  }, []);
 
   useEffect(() => {
     socket.emit("startGameTimer", { teamId });
@@ -74,25 +124,9 @@ function ChatGame() {
       alert("게임이 종료되었습니다!");
     });
 
-    const handleFinishedGame = async () => {
-      try {
-        await axios.patch(`http://localhost:3000/teams/${teamId}/finish`);
-        setGameEnded(true);
-      } catch (error) {
-        console.error("게임 종료로 상태 변경 실패", error);
-        alert("게임 상태 변경 실패");
-      }
-    };
-
-    socket.on("chat", (data) => {
-      const { user, content } = data;
-      useMultiplayerStore.getState().updatePlayerMessage(user.id, content);
-    });
-
     return () => {
       socket.off("timer");
       socket.off("gameEnd");
-      socket.off("chat");
     };
   }, [teamId]);
 
@@ -131,7 +165,7 @@ function ChatGame() {
         nickName,
       });
     }
-  }, [assignedPosition, userId, teamId, imgUrl]);
+  }, [assignedPosition]);
 
   return (
     <div
@@ -158,13 +192,24 @@ function ChatGame() {
           placeholder="모두 안녕하세요!! 채팅을 입력해주세요."
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handleSendMessage();
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSendMessage();
+            }
           }}
         />
         <button className={styles.sendButton} onClick={handleSendMessage}>
           <IoSend size={"2vw"} />
         </button>
       </div>
+      {showModal && (
+        <Modal onClick={() => setShowModal(false)}>
+          <div>
+            <p className={styles.title}>게임 결과</p>
+            <div>{/* 내용 넣기 */}</div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

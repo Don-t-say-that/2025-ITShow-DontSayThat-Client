@@ -37,8 +37,6 @@ function CharacterController({ playerId }: { playerId: string }) {
 
       setPosition(newX, newY);
 
-      console.log(`현재 위치: X=${newX}, Y=${newY}`);
-
       socket.emit("move", {
         id: playerId,
         x: newX,

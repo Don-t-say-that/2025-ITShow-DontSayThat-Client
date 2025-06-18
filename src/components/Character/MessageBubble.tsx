@@ -13,7 +13,7 @@ export default function MessageBubble({ player }) {
         borderRadius: "20px",
         border: "1px solid #ccc",
         display: "inline-block",
-        maxWidth: "400px",
+        width: "400px",
         whiteSpace: "pre-wrap",
         wordBreak: "break-word",
         fontSize: "30px",
