@@ -14,9 +14,9 @@ import useRoomStore from "../../store/roomStore";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { useMultiplayerStore } from "../../store/multiplayerStore";
 import axios from "axios";
-import useModalStore from "../../store/modalStore";
-import Modal from "../../components/Modal/Modal";
 import { useChatListener } from "../../hooks/useChatListener.ts";
+import { useNavigate } from "react-router-dom";
+import useModalStore from "../../store/modalStore.ts";
 
 function ChatGame() {
   usePlayerMovementListener(); // 플레이어 움직임 감지 후 업데이트
@@ -24,19 +24,20 @@ function ChatGame() {
 
   const [backgroundImage, setBackGroundImage] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const [userScore, setUserScore] = useState(0);
   const [hasFinished, setHasFinished] = useState(false);
   const userId = useUserStore((state) => state.id);
   const teamId = useRoomStore((state) => state.teamId);
   const randomImage = useRoomStore((state) => state.backgroundImage);
-  const { imgUrl, nickName } = useCharacterStore();
-  const { showModal, setShowModal } = useModalStore();
+  const imgUrl = useCharacterStore((state) => state.imgUrl);
+  const setUserStoreScore = useUserStore.getState().setScore;
   const [timer, setTimer] = useState(90);
   const [gameEnded, setGameEnded] = useState(false);
   const [message, setMessage] = useState("");
+  const setShowModal = useModalStore((state) => state.setShowModal);
 
   const finishGameRef = useRef(false);
   const gameEndProcessedRef = useRef(false);
+  const navigate = useNavigate();
 
   const bgMap: { [key: string]: string } = {
     gameBg1: bg1,
@@ -76,7 +77,7 @@ function ChatGame() {
     );
   };
 
-  // 3. 컴포넌트 언마운트 시 소켓 정리
+  // 컴포넌트 언마운트 시 소켓 정리
   useEffect(() => {
     return () => {
       // 모든 소켓 리스너 정리
@@ -85,36 +86,6 @@ function ChatGame() {
       socket.off("chat");
     };
   }, []);
-
-  /*const handleFinishedGame = async () => {
-
-    if (hasFinished || finishGameRef.current) {
-      console.log("게임 종료 처리 중복 호출 차단");
-      return;
-    }
-
-    // 동시 호출 차단
-    finishGameRef.current = true;
-    setHasFinished(true);
-
-    try {
-      await axios.patch(`${import.meta.env.VITE_BASE_URL}/teams/${teamId}/finish`);
-
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/teams/${userId}/${teamId}/result`
-      );
-      console.log(data);
-
-      setUserScore(data?.score);
-      setGameEnded(true);
-      setShowModal(true);
-    } catch (error) {
-      console.error("게임 종료로 상태 변경, 모달 열기 실패", error);
-      alert("게임 상태 변경, 모달 열기 실패");
-      finishGameRef.current = false;
-      setHasFinished(false);
-    }
-  };*/
 
    const handleFinishedGame = useCallback(async () => {
     console.log("handleFinishedGame 호출됨", {
@@ -137,33 +108,27 @@ function ChatGame() {
     try {
       console.log("게임 종료 API 호출 시작");
       
-      await axios.patch(`http://localhost:3000/teams/${teamId}/finish`);
+      await axios.patch(`${import.meta.env.VITE_BASE_URL}/teams/${teamId}/finish`);
       console.log("게임 종료 API 완료");
 
       const { data } = await axios.get(
-        `http://localhost:3000/teams/${userId}/${teamId}/result`
+        `${import.meta.env.VITE_BASE_URL}/teams/${userId}/${teamId}/result`
       );
       console.log("게임 결과:", data);
+      console.log("게임 결과 data.score:", data[0].score);
 
-      setUserScore(data?.score);
+      setUserStoreScore(data[0]?.score);
       setGameEnded(true);
       setShowModal(true);
+      navigate('/personalResult');
     } catch (error) {
       console.error("게임 종료 처리 실패", error);
-      alert("게임 상태 변경, 모달 열기 실패");
+      alert("게임 상태 변경 실패");
       // 에러 시에만 플래그 리셋하여 재시도 허용
       finishGameRef.current = false;
       setHasFinished(false);
     }
-  }, [hasFinished, teamId, userId, setUserScore, setGameEnded, setShowModal]);
-
-  useEffect(() => {
-    console.log("✅ ChatGame mounted");
-
-    return () => {
-      console.log("❌ ChatGame unmounted");
-    };
-  }, []);
+  }, [hasFinished, teamId, userId, setGameEnded]);
 
   useEffect(() => {
     if (!teamId) return;
@@ -235,7 +200,6 @@ function ChatGame() {
         x: assignedPosition.x,
         y: assignedPosition.y,
         imgUrl,
-        nickName,
       });
     }
   }, [assignedPosition]);
@@ -275,14 +239,6 @@ function ChatGame() {
           <IoSend size={"2vw"} />
         </button>
       </div>
-      {showModal && (
-        <Modal onClick={() => setShowModal(false)}>
-          <div>
-            <p className={styles.title}>게임 결과</p>
-            <div>{userScore}</div>
-          </div>
-        </Modal>
-      )}
     </div>
   );
 }

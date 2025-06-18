@@ -39,6 +39,7 @@
   top: 9vh;
   right: 5vw;
   box-shadow: 17px 20px 10px #0000006b;
+  z-index: 100;
 }
 
 .chat {
@@ -69,12 +70,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 7px 10px;
+  padding: 7px 15px;
+  margin: 3px 10px;
   background-color: #ffff;
   padding-left: 1vw;
   border-radius: 25px;
   border: none;
   box-shadow: 5px 5px 7px #0000006b;
+  z-index: 100;
 }
 
 .input {
@@ -84,6 +87,7 @@
   width: 45vw;
   height: 7vh;
   border: none;
+  z-index: 100;
 }
 
 .input:focus {outline: none;}

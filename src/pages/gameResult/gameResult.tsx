@@ -5,6 +5,7 @@ import axios from "axios";
 import { useGameResultStore } from "../../store/rankingStore";
 import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import useRoomStore from "../../store/roomStore";
 
 interface RankingItem {
     id: number;
@@ -17,7 +18,7 @@ interface RankingItem {
 
 function GameResult() {
     const { ranking, setRanking } = useGameResultStore();
-    const teamId = 66;  // roomstore에서 teamid 가져와서 쓰삼
+    const teamId = useRoomStore((state) => state.teamId);
 
     const navigate = useNavigate();
     const handleHomeClick = () => {
