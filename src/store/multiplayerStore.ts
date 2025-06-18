@@ -66,6 +66,6 @@ export const useMultiplayerStore = create<MultiplayerStore>((set) => ({
           },
         };
       });
-    }, 3000);
+    }, 5000);
   },
 }));

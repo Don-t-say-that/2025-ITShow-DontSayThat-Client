@@ -13,25 +13,18 @@ function AllCharacters() {
           style={{
             position: "absolute",
             transform: `translate(${player.x}px, ${player.y}px)`,
-            width: "240px",
-            height: "240px",
+            width: "300px",
+            height: "300px",
             transition: "0.15s ease-out",
             userSelect: "none",
             zIndex: player.id === myPlayerId ? 10 : 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center", 
           }}
         >
           <MessageBubble player={player} />
-          <img src={player.imgUrl} alt="player" />
-          <div
-            style={{
-              marginTop: "5px",
-              fontWeight: "bold",
-              color: "#fff",
-              textShadow: "0 0 5px black",
-            }}
-          >
-            {player.nickName}
-          </div>
+          <img src={player.imgUrl} style={{ height: "200px" }} alt="player" />
         </div>
       ))}
     </>

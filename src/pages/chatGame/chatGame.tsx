@@ -13,11 +13,11 @@ import useUserStore from "../../store/userStore";
 import useRoomStore from "../../store/roomStore";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { useMultiplayerStore } from "../../store/multiplayerStore";
+import axios from "axios";
 
 function ChatGame() {
   usePlayerMovementListener(); // 플레이어 움직임 감지 후 업데이트
   const [backgroundImage, setBackGroundImage] = useState("");
-  // const [ranking, setRanking] = useState({ nickName: String, score: String });
   const userId = useUserStore((state) => state.id);
   const teamId = useRoomStore((state) => state.teamId);
   const randomImage = useRoomStore((state) => state.backgroundImage);
@@ -33,11 +33,12 @@ function ChatGame() {
     x: number;
     y: number;
   } | null>(null);
+
   const initialPositions = [
-    { x: 400, y: 650 },
-    { x: 580, y: 650 },
-    { x: 760, y: 650 },
-    { x: 940, y: 650 },
+    { x: -370, y: 110 }, // 왼쪽
+    { x: -40, y: 110 }, // 중앙 왼쪽
+    { x: 170, y: 110 }, // 중앙 오른쪽
+    { x: 410, y: 110 }, // 오른쪽 (1920 - 500 = 1420이 최대이므로 안전)
   ];
 
   const [timer, setTimer] = useState(90);
@@ -48,40 +49,52 @@ function ChatGame() {
     if (!message.trim()) return;
     console.log("savedMessage:", message);
 
-    socket.emit("chat", {
-      content: message,
-      userId,
-      teamId,
-    }, () => {
-      setMessage("");
-});
-
+    socket.emit(
+      "chat",
+      {
+        content: message,
+        userId,
+        teamId,
+      },
+      () => {
+        setMessage("");
+      }
+    );
   };
 
   useEffect(() => {
-  socket.emit("startGameTimer", { teamId });
+    socket.emit("startGameTimer", { teamId });
 
-  socket.on("timer", (seconds: number) => {
-    setTimer(seconds);
-  });
+    socket.on("timer", (seconds: number) => {
+      setTimer(seconds);
+    });
 
-  socket.on("gameEnd", () => {
-    setGameEnded(true);
-    alert("게임이 종료되었습니다!");
-  });
+    socket.on("gameEnd", () => {
+      handleFinishedGame();
+      alert("게임이 종료되었습니다!");
+    });
 
-  socket.on("chat", (data) => {
-    useMultiplayerStore
-      .getState()
-      .updatePlayerMessage(data.userId, data.content);
-  });
+    const handleFinishedGame = async () => {
+      try {
+        await axios.patch(`http://localhost:3000/teams/${teamId}/finish`);
+        setGameEnded(true);
+      } catch (error) {
+        console.error("게임 종료로 상태 변경 실패", error);
+        alert("게임 상태 변경 실패");
+      }
+    };
 
-  return () => {
-    socket.off("timer");
-    socket.off("gameEnd");
-    socket.off("chat");
-  };
-}, [teamId]);
+    socket.on("chat", (data) => {
+      const { user, content } = data;
+      useMultiplayerStore.getState().updatePlayerMessage(user.id, content);
+    });
+
+    return () => {
+      socket.off("timer");
+      socket.off("gameEnd");
+      socket.off("chat");
+    };
+  }, [teamId]);
 
   useEffect(() => {
     if (randomImage && bgMap[randomImage]) {
@@ -93,28 +106,32 @@ function ChatGame() {
   }, [randomImage]);
 
   useEffect(() => {
-  if (userId && teamId && imgUrl) {
-    const index = Number(userId) % initialPositions.length;
-    const position = initialPositions[index];
-    setAssignedPosition(position);
-    socket.emit("joinRoom", { teamId, userId });
-    useMultiplayerStore.getState().setMyPlayerId(String(userId));
-  }
-}, [userId, teamId, imgUrl]);
-
+    if (userId && teamId && imgUrl) {
+      const index = Number(userId) % initialPositions.length;
+      const position = initialPositions[index];
+      console.log(position);
+      setAssignedPosition(position);
+      socket.emit("joinRoom", { teamId, userId });
+      useMultiplayerStore.getState().setMyPlayerId(String(userId));
+    }
+  }, [userId, teamId, imgUrl]);
 
   useEffect(() => {
-  if (assignedPosition && userId && teamId && imgUrl) {
-    socket.emit("move", {
-      teamId,
-      id: userId,
-      x: assignedPosition.x,
-      y: assignedPosition.y,
-      imgUrl,
-      nickName,
-    });
-  }
-}, [assignedPosition, userId, teamId, imgUrl]);
+    if (assignedPosition && userId && teamId && imgUrl) {
+      // useCharacterStore의 위치도 업데이트
+      const { setPosition } = useCharacterStore.getState();
+      setPosition(assignedPosition.x, assignedPosition.y);
+
+      socket.emit("move", {
+        teamId,
+        id: userId,
+        x: assignedPosition.x,
+        y: assignedPosition.y,
+        imgUrl,
+        nickName,
+      });
+    }
+  }, [assignedPosition, userId, teamId, imgUrl]);
 
   return (
     <div
@@ -135,6 +152,7 @@ function ChatGame() {
       </div>
       <div className={styles.inputWrapper}>
         <input
+          checked
           className={styles.input}
           value={message}
           placeholder="모두 안녕하세요!! 채팅을 입력해주세요."
