@@ -88,10 +88,10 @@ function ChatGame() {
     setHasFinished(true); // 실행 됐으면 재실행 방지
 
     try {
-      await axios.patch(`http://localhost:3000/teams/${teamId}/finish`);
+      await axios.patch(`${import.meta.env.VITE_BASE_URL}/teams/${teamId}/finish`);
 
       const { data } = await axios.get(
-        `http://localhost:3000/teams/${userId}/${teamId}/result`
+        `${import.meta.env.VITE_BASE_URL}/teams/${userId}/${teamId}/result`
       );
       console.log(data);
 

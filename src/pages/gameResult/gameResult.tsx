@@ -27,7 +27,7 @@ function GameResult() {
     useEffect(() => {
         const fetchRanking = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/teams/${teamId}/ranking`);
+                const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/teams/${teamId}/ranking`);
                 const data = res.data;
 
                 if (data.length >= 2) {

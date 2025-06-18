@@ -36,7 +36,7 @@ function EnterForbbiden() {
         }
 
         try {
-            await axios.post(`http://localhost:3000/teams/${teamId}/forbidden-words`, {
+            await axios.post(`${import.meta.env.VITE_BASE_URL}/teams/${teamId}/forbidden-words`, {
                 userId,
                 word: forbbiden
             });

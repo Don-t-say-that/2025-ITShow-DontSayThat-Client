@@ -35,7 +35,7 @@ function RandomCharacter() {
         }
 
         const response = await axios.patch(
-          `http://localhost:3000/users/${userId}/random`
+          `${import.meta.env.VITE_BASE_URL}/users/${userId}/random`
         );
 
         setImage(response.data.character.image);

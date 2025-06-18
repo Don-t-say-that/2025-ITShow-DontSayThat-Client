@@ -84,7 +84,7 @@ function WaitingRoom() {
       }
 
       console.log('서버에 퇴장 요청');
-      await axios.patch(`http://localhost:3000/teams/${userId}/users`);
+      await axios.patch(`${import.meta.env.VITE_BASE_URL}/teams/${userId}/users`);
 
       console.log('게임 목록으로 이동');
       navigate('/joinGame');
@@ -99,7 +99,7 @@ function WaitingRoom() {
 
     try {
       console.log(`사용자 목록 새로고침 ${teamId}`);
-      const response = await axios.get(`http://localhost:3000/teams/${teamId}/users`);
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/teams/${teamId}/users`);
       console.log(`새 사용자 목록:`, response.data);
 
       if (isMounted.current) {

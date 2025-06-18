@@ -26,7 +26,7 @@ function Ranking() {
     useEffect(() => {
         const fetchRanking = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/teams/ranking`);
+                const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/teams/ranking`);
                 const data = res.data;
 
                 const sortedData = data.sort((a: RankingItem, b: RankingItem) => b.score - a.score);

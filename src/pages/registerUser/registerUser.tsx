@@ -35,7 +35,7 @@ function RegisterUser() {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/users', {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users`, {
         name,
         password,
       });
@@ -47,7 +47,7 @@ function RegisterUser() {
 
         if (mode === 'join') {
           if (roomId) {
-            await axios.patch(`http://localhost:3000/users/${userId}/team`, {
+            await axios.patch(`${import.meta.env.VITE_BASE_URL}/users/${userId}/team`, {
               teamId: Number(roomId),
             });
           }
