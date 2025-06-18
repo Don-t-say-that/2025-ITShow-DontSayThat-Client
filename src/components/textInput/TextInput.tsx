@@ -18,6 +18,7 @@ const TextInput: React.FC<TextInputProps> = ({
 }) => {
   return (
     <input
+      checked
       className={styles.textInput}
       type="text"
       placeholder={placeholder}

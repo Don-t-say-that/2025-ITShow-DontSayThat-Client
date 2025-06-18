@@ -8,5 +8,8 @@
     font-family: 'Maplestory';
     font-size: 50px;
     color: #F8AE01;
-    /* margin-top: 80px; */
+}
+
+.actionButton:hover {
+    transform: scale(1.1);
 }
