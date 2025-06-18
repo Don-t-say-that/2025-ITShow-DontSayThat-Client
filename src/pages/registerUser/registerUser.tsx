@@ -21,9 +21,9 @@ function RegisterUser() {
   const mode = useNavigationStore((state) => state.mode);
   const roomId = useRoomStore((state) => state.teamId);
 
-   useEffect(() => {
-      setName('');
-    }, [setName]);
+  useEffect(() => {
+    setName('');
+  }, [setName]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -42,7 +42,6 @@ function RegisterUser() {
 
       if (response.status === 201) {
         setUserId(response.data.id);
-        navigate('/createRoom');
         const userId = response.data.id;
         console.log("regsterUser", userId);
 
@@ -54,11 +53,11 @@ function RegisterUser() {
           }
         }
 
-        if (mode === 'create') {
-          navigate('/createRoom');
-        } else if (mode === 'join') {
-          // navigate('/waitingRoom');
+        if (mode === 'join') {
           navigate('/gameDescription');
+        }
+        else if (mode === 'create') {
+          navigate('/createRoom');
         }
       }
 

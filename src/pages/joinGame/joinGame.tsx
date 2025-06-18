@@ -25,6 +25,11 @@ function JoinGame() {
     navigate('/registerUser');
   };
 
+ const handleJoinRoom = async (teamId: number) => {
+    setTeamId(teamId);
+    setMode('join');
+    navigate('/registerUser');
+  };
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -70,12 +75,7 @@ function JoinGame() {
 
 
 
-  const handleJoinRoom = async (teamId: number) => {
-    setTeamId(teamId);
-    setMode('join');
-    navigate('/registerUser');
-  };
-
+ 
   return (
     <>
       <div className={styles.background}>
