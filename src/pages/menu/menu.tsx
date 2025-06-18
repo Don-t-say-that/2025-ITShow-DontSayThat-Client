@@ -6,10 +6,14 @@ import { useNavigate } from 'react-router-dom';
 function Menu() {
 
   const navigate = useNavigate();
-  const handleBackgroundClick = () => {
+  const handleGameClick = () => {
     navigate('/joinGame');
   };
 
+  const handleRankingClick = () => {
+    navigate('/ranking');
+  }
+  
   return (
     <div className={styles.background}>
       <p className={styles.title}>
@@ -18,8 +22,8 @@ function Menu() {
         THAT
       </p>
       <div className={styles.buttonContainer}>
-        <MenuButton onClick={handleBackgroundClick}>게임하기</MenuButton>
-        <MenuButton onClick={handleBackgroundClick}>랭킹</MenuButton>
+        <MenuButton onClick={handleGameClick}>게임하기</MenuButton>
+        <MenuButton onClick={handleRankingClick}>랭킹</MenuButton>
       </div>
     </div>
   );

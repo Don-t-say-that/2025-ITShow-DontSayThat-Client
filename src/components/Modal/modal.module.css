@@ -27,3 +27,7 @@
   display: flex;
   gap: 30vh;
 }
+
+.button {
+  margin-top: 10vh;
+}

@@ -1,0 +1,61 @@
+.background {
+  position: fixed;
+  background-size: cover;
+  background-position: center;
+  background-image: url("../../assets/Image/gameBackground/gameBg4.png");
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-family: "Maplestory";
+  color: #f8ae01;
+  font-size: 6.77vw;
+  -webkit-text-stroke: 1.4vw #463309;
+  paint-order: stroke;
+}
+
+.contentContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 5vw;
+}
+
+.characterContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.character {
+  width: 400px;
+  height: 400px;
+}
+
+.name {
+  width: 200px;
+  font-family: "Maplestory";
+  font-size: 2vw;
+  margin-top: -10px;
+  margin-right: 30px;
+  color: #000;
+}
+
+.scoreTitle {
+  font-family: "Darumadrop One", sans-serif;
+  font-size: 5vw;
+  color: #000;
+}
+
+.score {
+  font-family: "Darumadrop One", sans-serif;
+  font-size: 7vw;
+  color: #000;
+}

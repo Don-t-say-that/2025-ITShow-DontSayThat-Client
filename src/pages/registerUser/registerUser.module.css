@@ -7,24 +7,25 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }
 
 .title {
+  position: absolute;
+  top: 7vh;
   font-family: 'Maplestory';
   color: #F8AE01;
   font-size: 6.77vw;
   -webkit-text-stroke: 1.4vw #463309;
   paint-order: stroke;
-  margin-bottom: 5vh;
 }
 
 .inputContainer {
-  margin-top: 3vh;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  align-items: center;
-  width: 100%;
+  gap: 2vh;
+  position: relative;
+  margin-top: 13.3vh;
+  margin-bottom: 7.6vw;
 }

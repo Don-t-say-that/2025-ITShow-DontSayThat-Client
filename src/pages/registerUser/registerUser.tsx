@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import useRegisterStore from '../../store/registerStore';
 import useUserStore from '../../store/userStore';
 import useNavigationStore from '../../store/navigationStore';
@@ -20,6 +21,10 @@ function RegisterUser() {
   const mode = useNavigationStore((state) => state.mode);
   const roomId = useRoomStore((state) => state.teamId);
 
+  useEffect(() => {
+    setName('');
+  }, [setName]);
+
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
@@ -30,30 +35,29 @@ function RegisterUser() {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/users', {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users`, {
         name,
         password,
       });
 
       if (response.status === 201) {
         setUserId(response.data.id);
-        navigate('/createRoom');
         const userId = response.data.id;
-        setUserId(userId);
+        console.log("regsterUser", userId);
 
         if (mode === 'join') {
           if (roomId) {
-            await axios.patch(`http://localhost:3000/users/${userId}/team`, {
+            await axios.patch(`${import.meta.env.VITE_BASE_URL}/users/${userId}/team`, {
               teamId: Number(roomId),
             });
           }
         }
 
-        if (mode === 'create') {
-          navigate('/createRoom');
-        } else if (mode === 'join') {
-          // navigate('/waitingRoom');
+        if (mode === 'join') {
           navigate('/gameDescription');
+        }
+        else if (mode === 'create') {
+          navigate('/createRoom');
         }
       }
 
@@ -84,7 +88,9 @@ function RegisterUser() {
           />
         </div>
 
-        <ActionButton onClick={handleSubmit}>완료</ActionButton>
+        <div className={styles.buttonContainer}>
+          <ActionButton onClick={handleSubmit}>완료</ActionButton>
+        </div>
 
         {showModal && (
           <Modal onClick={() => setShowModal(false)}>

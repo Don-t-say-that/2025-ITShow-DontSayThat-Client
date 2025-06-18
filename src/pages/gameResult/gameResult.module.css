@@ -1,0 +1,93 @@
+.background {
+    position: fixed;
+    background-image: url("../../assets/Image/blurBackground.jpg");
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    position: absolute;
+    top: 7.9vh;
+    font-family: "Maplestory";
+    color: #f8ae01;
+    font-size: 5vw;
+    -webkit-text-stroke: 1.2vw #463309;
+    paint-order: stroke;
+    z-index: 10;
+}
+
+.board {
+    /* 보드를 화면 중앙에 배치 */
+    background-image: url("../../assets/Image/board.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    /* 이미지 비율 유지 */
+    background-position: center;
+    width: 100vw;
+    max-width: 1404px;
+    height: 80vh;
+    max-height: 929px;
+
+    /* 보드 안에 텍스트 배치하기 위한 설정 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+}
+
+.rowRanking {
+    font-family: 'Maplestory';
+    font-size: 2vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    gap: 10vw;
+}
+
+.order {
+    font-weight: bold;
+    color: #FFFFFF;
+    font-size: 3vw;
+    -webkit-text-stroke: 0.8vw #FFB40F;
+    paint-order: stroke;
+    /* 순위 강조 색상 */
+    width: 50px;
+}
+
+p {
+    margin: 0;
+}
+
+.homeButton {
+    position: fixed;
+    bottom: 130px;
+    right: 90px;
+    z-index: 100;
+}
+
+.homeIcon {
+    border: none;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #FFFFFF;
+    border-radius: 40%;
+    padding: 1vw;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}

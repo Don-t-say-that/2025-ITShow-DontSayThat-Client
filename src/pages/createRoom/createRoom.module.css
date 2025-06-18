@@ -13,16 +13,19 @@
 
 .title {
   position: absolute;
-  top:0px;
+  top: 7vh;
   font-family: 'Maplestory';
   color: #F8AE01;
   font-size: 6.77vw;
-  -webkit-text-stroke: 1.4vw  #463309;
+  -webkit-text-stroke: 1.4vw #463309;
   paint-order: stroke;
 }
 
-.inputContainer{
-   position: relative;
-   margin-top: 13.3vw;;
-   margin-bottom: 7.6vw;
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  position: relative;
+  margin-top: 13.3vh;
+  margin-bottom: 7.6vw;
 }
