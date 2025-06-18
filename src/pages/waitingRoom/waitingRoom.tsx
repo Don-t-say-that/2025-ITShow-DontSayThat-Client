@@ -11,7 +11,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import useSocket from '../../hooks/useSocket';
 import { useMemo } from 'react';
-import useModalStore from '../../store/modalStore';
+import useModalStore from '../../store/ModalStore';
 import Modal from '../../components/Modal/Modal';
 
 type WaitingRoomUser = {

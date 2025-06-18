@@ -1,6 +1,6 @@
 import Modal from "../../components/Modal/Modal";
 import styles from "./personalResult.module.css";
-import useModalStore from "../../store/modalStore";
+import useModalStore from "../../store/ModalStore";
 import useRoomStore from "../../store/roomStore";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import useUserStore from "../../store/userStore";

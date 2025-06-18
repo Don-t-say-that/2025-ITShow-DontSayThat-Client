@@ -16,7 +16,7 @@ import { useMultiplayerStore } from "../../store/multiplayerStore";
 import axios from "axios";
 import { useChatListener } from "../../hooks/useChatListener.ts";
 import { useNavigate } from "react-router-dom";
-import useModalStore from "../../store/modalStore.ts";
+import useModalStore from "../../store/ModalStore.ts";
 
 function ChatGame() {
   usePlayerMovementListener(); // 플레이어 움직임 감지 후 업데이트

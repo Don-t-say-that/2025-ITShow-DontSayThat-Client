@@ -8,7 +8,7 @@ import ActionButton from '../../components/ActionButton/ActionButton';
 import Modal from '../../components/Modal/Modal';
 import useUserStore from '../../store/userStore';
 import useRoomStore from '../../store/roomStore';
-import useModalStore from '../../store/modalStore';
+import useModalStore from '../../store/ModalStore';
 
 function CreateRoom() {
   const { roomName, setRoomName, setTeamId } = useRoomStore();

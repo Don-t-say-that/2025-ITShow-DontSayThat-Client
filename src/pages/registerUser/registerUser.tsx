@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import useRegisterStore from '../../store/registerStore';
 import useUserStore from '../../store/userStore';
 import useNavigationStore from '../../store/navigationStore';
-import useModalStore from '../../store/modalStore';
+import useModalStore from '../../store/ModalStore';
 import useRoomStore from '../../store/roomStore';
 import styles from './registerUser.module.css';
 import TextInput from '../../components/textInput/TextInput';
