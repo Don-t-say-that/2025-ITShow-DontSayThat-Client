@@ -32,7 +32,7 @@ function CreateRoom() {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/teams', {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/teams`, {
         name: roomName,
         leaderId: userId,
       });

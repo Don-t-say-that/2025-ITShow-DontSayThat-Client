@@ -13,6 +13,7 @@
 
 .titleContainer {
   position: absolute;
+  top: 5vh;
   left: 3.1vw;
   display: flex;
   align-items: center;

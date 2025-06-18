@@ -34,7 +34,7 @@ function JoinGame() {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get<Room[]>('http://localhost:3000/teams/waiting');
+        const response = await axios.get<Room[]>(`${import.meta.env.VITE_BASE_URL}/teams/waiting`);
         setRooms(response.data);
       } catch (error) {
         console.error('방 목록 불러오기 실패:', error);

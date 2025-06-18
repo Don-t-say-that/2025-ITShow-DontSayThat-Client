@@ -98,10 +98,10 @@ function ChatGame() {
     setHasFinished(true);
 
     try {
-      await axios.patch(`http://localhost:3000/teams/${teamId}/finish`);
+      await axios.patch(`${import.meta.env.VITE_BASE_URL}/teams/${teamId}/finish`);
 
       const { data } = await axios.get(
-        `http://localhost:3000/teams/${userId}/${teamId}/result`
+        `${import.meta.env.VITE_BASE_URL}/teams/${userId}/${teamId}/result`
       );
       console.log(data);
 
