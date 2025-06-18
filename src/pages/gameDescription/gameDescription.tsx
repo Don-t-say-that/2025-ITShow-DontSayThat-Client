@@ -29,7 +29,7 @@ function GameDescription() {
     const fetchRooms = async () => {
       try {
         const response = await axios.patch<Room[]>(
-          `http://localhost:3000/users/${userId}/team`,
+          `${import.meta.env.VITE_BASE_URL}/users/${userId}/team`,
           {
             teamId,
           }
