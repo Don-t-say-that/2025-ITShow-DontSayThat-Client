@@ -1,5 +1,5 @@
 import { div } from 'motion/react-client';
-import styles from './UserBox.module.css';
+import styles from './userBox.module.css';
 import { FaCrown } from "react-icons/fa";
 
 interface WaitingRoomUser {
