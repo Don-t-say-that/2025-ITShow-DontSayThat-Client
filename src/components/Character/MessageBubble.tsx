@@ -1,4 +1,13 @@
-export default function MessageBubble({ player }) {
+type Player = {
+  id: string;
+  x: number;
+  y: number;
+  imgUrl: string;
+  nickName: string;
+  message?: string;
+}
+
+export default function MessageBubble({ player }: { player: Player }) {
   if (!player.message) return null;
 
   return (

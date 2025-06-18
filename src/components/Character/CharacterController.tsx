@@ -49,6 +49,7 @@ function CharacterController({ playerId }: { playerId: string }) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [imgUrl, setPosition, x, y]);
+  return null;
 }
 
 export default CharacterController;
