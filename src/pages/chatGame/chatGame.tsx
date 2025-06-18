@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import AllCharacters from "../../components/Character/AllCharacter";
 import CharacterController from "../../components/Character/CharacterController";
 import { usePlayerMovementListener } from "../../hooks/usePlayerMovementListener";
@@ -35,6 +35,9 @@ function ChatGame() {
   const [gameEnded, setGameEnded] = useState(false);
   const [message, setMessage] = useState("");
 
+  const finishGameRef = useRef(false);
+  const gameEndProcessedRef = useRef(false);
+
   const bgMap: { [key: string]: string } = {
     gameBg1: bg1,
     gameBg2: bg2,
@@ -55,7 +58,7 @@ function ChatGame() {
   ];
 
   const handleSendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim() || isSending) return;
 
     setIsSending(true);
 
@@ -83,9 +86,16 @@ function ChatGame() {
     };
   }, []);
 
-  const handleFinishedGame = async () => {
-    if (hasFinished) return;
-    setHasFinished(true); // 실행 됐으면 재실행 방지
+  /*const handleFinishedGame = async () => {
+
+    if (hasFinished || finishGameRef.current) {
+      console.log("게임 종료 처리 중복 호출 차단");
+      return;
+    }
+
+    // 동시 호출 차단
+    finishGameRef.current = true;
+    setHasFinished(true);
 
     try {
       await axios.patch(`http://localhost:3000/teams/${teamId}/finish`);
@@ -101,8 +111,51 @@ function ChatGame() {
     } catch (error) {
       console.error("게임 종료로 상태 변경, 모달 열기 실패", error);
       alert("게임 상태 변경, 모달 열기 실패");
+      finishGameRef.current = false;
+      setHasFinished(false);
     }
-  };
+  };*/
+
+   const handleFinishedGame = useCallback(async () => {
+    console.log("handleFinishedGame 호출됨", {
+      hasFinished,
+      finishGameRef: finishGameRef.current,
+      teamId,
+      userId
+    });
+
+    // 이미 처리 중이거나 완료된 경우 즉시 리턴
+    if (hasFinished || finishGameRef.current) {
+      console.log("게임 종료 처리 중복 호출 차단");
+      return;
+    }
+
+    // 플래그 즉시 설정하여 동시 호출 차단
+    finishGameRef.current = true;
+    setHasFinished(true);
+
+    try {
+      console.log("게임 종료 API 호출 시작");
+      
+      await axios.patch(`http://localhost:3000/teams/${teamId}/finish`);
+      console.log("게임 종료 API 완료");
+
+      const { data } = await axios.get(
+        `http://localhost:3000/teams/${userId}/${teamId}/result`
+      );
+      console.log("게임 결과:", data);
+
+      setUserScore(data?.score);
+      setGameEnded(true);
+      setShowModal(true);
+    } catch (error) {
+      console.error("게임 종료 처리 실패", error);
+      alert("게임 상태 변경, 모달 열기 실패");
+      // 에러 시에만 플래그 리셋하여 재시도 허용
+      finishGameRef.current = false;
+      setHasFinished(false);
+    }
+  }, [hasFinished, teamId, userId, setUserScore, setGameEnded, setShowModal]);
 
   useEffect(() => {
     console.log("✅ ChatGame mounted");
@@ -113,20 +166,40 @@ function ChatGame() {
   }, []);
 
   useEffect(() => {
+    if (!teamId) return;
+
+    console.log("소켓 리스너 등록");
+    
     socket.emit("startGameTimer", { teamId });
 
-    socket.on("timer", (seconds: number) => {
+    const handleTimer = (seconds: number) => {
       setTimer(seconds);
-    });
+    };
 
-    socket.on("gameEnd", () => {
-      handleFinishedGame();
+    const handleGameEnd = () => {
+      console.log("gameEnd 이벤트 수신", {
+        gameEndProcessedRef: gameEndProcessedRef.current,
+        finishGameRef: finishGameRef.current
+      });
+
+      // gameEnd 이벤트 중복 처리 방지
+      if (gameEndProcessedRef.current) {
+        console.log("gameEnd 이벤트 중복 처리 차단");
+        return;
+      }
+
+      gameEndProcessedRef.current = true;
       alert("게임이 종료되었습니다!");
-    });
+      handleFinishedGame();
+    };
+
+    socket.on("timer", handleTimer);
+    socket.on("gameEnd", handleGameEnd);
 
     return () => {
-      socket.off("timer");
-      socket.off("gameEnd");
+      console.log("소켓 리스너 정리");
+      socket.off("timer", handleTimer);
+      socket.off("gameEnd", handleGameEnd);
     };
   }, [teamId]);
 
@@ -206,7 +279,7 @@ function ChatGame() {
         <Modal onClick={() => setShowModal(false)}>
           <div>
             <p className={styles.title}>게임 결과</p>
-            <div>{/* 내용 넣기 */}</div>
+            <div>{userScore}</div>
           </div>
         </Modal>
       )}
