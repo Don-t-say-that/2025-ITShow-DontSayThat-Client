@@ -26,3 +26,10 @@
    margin-top: 13.3vw;;
    margin-bottom: 7.6vw;
 }
+
+.readyToStart {
+  margin-top: 5vh;
+  font-size: 5rem;
+  font-family: 'Maplestory';
+  color: white;
+}

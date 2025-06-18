@@ -88,7 +88,7 @@ function EnterForbbiden() {
                     />
                 </div>
 
-                <ActionButton 
+                <ActionButton
                     onClick={handleEnterForbbiden}
                 >
                     {isReady ? "준비 완료!" : "준비"}
@@ -97,8 +97,7 @@ function EnterForbbiden() {
 
                 {allUsersReady && (
                     <div className={styles.readyToStart}>
-                        <button onClick={() => navigate('/chatGame')}>
-                        </button>
+                        <p>3초 후 게임이 시작됩니다...</p>
                     </div>
                 )}
             </div>
