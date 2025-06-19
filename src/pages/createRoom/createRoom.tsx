@@ -9,6 +9,7 @@ import Modal from '../../components/Modal/Modal';
 import useUserStore from '../../store/userStore';
 import useRoomStore from '../../store/roomStore';
 import useModalStore from '../../store/ModalStore';
+import { SlArrowLeft } from 'react-icons/sl';
 
 function CreateRoom() {
   const { roomName, setRoomName, setTeamId } = useRoomStore();
@@ -49,9 +50,16 @@ function CreateRoom() {
     }
   };
 
+  const handleArrowClick = () => {
+    navigate('/joinGame');
+  };
+
   return (
     <>
       <div className={styles.background}>
+        <div>
+          <SlArrowLeft size={'2.6vw'} color='white' fontWeight={50} onClick={handleArrowClick} className={styles.arrow} />
+        </div>
         <p className={styles.title}>방 만들기</p>
         <div className={styles.inputContainer}>
           <TextInput

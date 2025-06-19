@@ -7,6 +7,7 @@ import axios from 'axios';
 import useRoomStore from '../../store/roomStore';
 import useNavigationStore from '../../store/navigationStore';
 import useSocket from '../../hooks/useSocket';
+import { SlArrowLeft } from 'react-icons/sl';
 
 interface Room {
   id: number;
@@ -70,12 +71,14 @@ function JoinGame() {
     };
   }, [setRooms, socket]);
 
+  const handleArrowClick = () => {
+    navigate('/');
+  };
 
-
- 
   return (
     <>
       <div className={styles.background}>
+        <SlArrowLeft size={'2.6vw'} color='white' fontWeight={50} onClick={handleArrowClick} className={styles.arrow}/>
         <p className={styles.title}>게임 참가하기</p>
         <div className={styles.roomList}>
           {rooms.map((room) => (

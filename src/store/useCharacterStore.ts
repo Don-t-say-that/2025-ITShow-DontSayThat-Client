@@ -9,7 +9,6 @@ interface CharacterState {
   setImage: (url: string) => void;
 }
 
-// 화면 중앙 계산
 const screenWidth = 1920;
 const screenHeight = 1080;
 const characterWidth = 200;

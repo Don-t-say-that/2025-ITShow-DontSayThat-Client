@@ -11,6 +11,7 @@ import Modal from '../../components/Modal/Modal';
 import '../../App.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { SlArrowLeft } from 'react-icons/sl';
 
 function RegisterUser() {
 
@@ -69,9 +70,16 @@ function RegisterUser() {
     }
   };
 
+  const handleArrowClick = () => {
+    navigate('/joinGame');
+  };
+
   return (
     <>
       <div className={styles.background}>
+        <div>
+          <SlArrowLeft size={'2.6vw'} color='white' fontWeight={50} onClick={handleArrowClick} className={styles.arrow}/>
+          </div>
         <p className={styles.title}>사용자 등록하기</p>
 
         <div className={styles.inputContainer}>

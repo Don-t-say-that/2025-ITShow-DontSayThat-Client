@@ -21,6 +21,14 @@
   paint-order: stroke;
 }
 
+.arrow {
+  position: absolute;
+  top: 9vh;
+  left: 5vw;
+  z-index: 1000;
+  cursor: pointer;
+}
+
 .inputContainer {
   display: flex;
   flex-direction: column;

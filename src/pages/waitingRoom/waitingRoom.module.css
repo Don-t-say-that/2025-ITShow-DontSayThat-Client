@@ -20,6 +20,14 @@
   gap: 3vw;
 }
 
+.arrow {
+  position: absolute;
+  top: 9vh;
+  left: 5vw;
+  z-index: 1000;
+  cursor: pointer;
+}
+
 .title {
   color: white;
   font-size: 3.1vw;

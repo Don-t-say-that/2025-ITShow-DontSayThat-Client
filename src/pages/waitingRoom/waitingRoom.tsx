@@ -240,7 +240,7 @@ function WaitingRoom() {
   return (
     <div className={styles.background}>
       <div className={styles.titleContainer}>
-        <SlArrowLeft size={'2.6vw'} color='white' fontWeight={50} onClick={handleArrowClick} />
+        <SlArrowLeft size={'2.6vw'} color='white' fontWeight={50} onClick={handleArrowClick} className={styles.arrow}/>
         <p className={styles.title}>대기방 ({activeUsersCount}/4)</p>
       </div>
 
