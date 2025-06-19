@@ -88,16 +88,9 @@ function ChatGame() {
   }, []);
 
    const handleFinishedGame = useCallback(async () => {
-    console.log("handleFinishedGame 호출됨", {
-      hasFinished,
-      finishGameRef: finishGameRef.current,
-      teamId,
-      userId
-    });
 
     // 이미 처리 중이거나 완료된 경우 즉시 리턴
     if (hasFinished || finishGameRef.current) {
-      console.log("게임 종료 처리 중복 호출 차단");
       return;
     }
 
@@ -106,16 +99,12 @@ function ChatGame() {
     setHasFinished(true);
 
     try {
-      console.log("게임 종료 API 호출 시작");
       
       await axios.patch(`${import.meta.env.VITE_BASE_URL}/teams/${teamId}/finish`);
-      console.log("게임 종료 API 완료");
 
       const { data } = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/teams/${userId}/${teamId}/result`
       );
-      console.log("게임 결과:", data);
-      console.log("게임 결과 data.score:", data[0].score);
 
       setUserStoreScore(data[0]?.score);
       setGameEnded(true);
@@ -132,9 +121,6 @@ function ChatGame() {
 
   useEffect(() => {
     if (!teamId) return;
-
-    console.log("소켓 리스너 등록");
-    
     socket.emit("startGameTimer", { teamId });
 
     const handleTimer = (seconds: number) => {
@@ -142,14 +128,8 @@ function ChatGame() {
     };
 
     const handleGameEnd = () => {
-      console.log("gameEnd 이벤트 수신", {
-        gameEndProcessedRef: gameEndProcessedRef.current,
-        finishGameRef: finishGameRef.current
-      });
-
       // gameEnd 이벤트 중복 처리 방지
       if (gameEndProcessedRef.current) {
-        console.log("gameEnd 이벤트 중복 처리 차단");
         return;
       }
 
@@ -162,7 +142,6 @@ function ChatGame() {
     socket.on("gameEnd", handleGameEnd);
 
     return () => {
-      console.log("소켓 리스너 정리");
       socket.off("timer", handleTimer);
       socket.off("gameEnd", handleGameEnd);
     };
@@ -170,7 +149,6 @@ function ChatGame() {
 
   useEffect(() => {
     if (randomImage && bgMap[randomImage]) {
-      console.log("배경 적용:", bgMap[randomImage]);
       setBackGroundImage(bgMap[randomImage]);
     } else {
       console.warn("배경 이미지 설정 실패. randomImage:", randomImage);
@@ -181,7 +159,6 @@ function ChatGame() {
     if (userId && teamId && imgUrl) {
       const index = Number(userId) % initialPositions.length;
       const position = initialPositions[index];
-      console.log(position);
       setAssignedPosition(position);
       socket.emit("joinRoom", { teamId, userId });
       useMultiplayerStore.getState().setMyPlayerId(String(userId));

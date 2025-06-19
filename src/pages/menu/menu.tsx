@@ -2,6 +2,7 @@ import '../../App.css';
 import styles from './menu.module.css';
 import MenuButton from '../../components/menuButton/MenuButton';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
 
 function Menu() {
 
@@ -14,6 +15,14 @@ function Menu() {
     navigate('/ranking');
   }
   
+   useEffect(() => {
+    const timeout = setTimeout(() => {
+      navigate('/');
+    }, 10000);
+
+    return () => clearTimeout(timeout);
+  }, [navigate]);
+
   return (
     <div className={styles.background}>
       <p className={styles.title}>

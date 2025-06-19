@@ -44,17 +44,14 @@ function JoinGame() {
     fetchRooms();
 
     const handleTeamCreated = (newRoom: Room) => {
-      console.log('새 팀 생성', newRoom);
       setRooms((prevRooms) => [...prevRooms, newRoom]);
     };
 
     const handleTeamDeleted = ({ teamId }: { teamId: number }) => {
-      console.log('팀 삭제됨:', teamId);
       setRooms((prevTeams: any[]) => prevTeams.filter(team => team.id !== teamId));
     };
 
     const handleUserCountUpdated = ({ teamId, userCount }: { teamId: number; userCount: number }) => {
-      console.log(`팀 ${teamId} 유저 수 변경됨: ${userCount}`);
       setRooms((prevRooms) =>
         prevRooms.map((room) =>
           room.id === teamId ? { ...room, userCount } : room

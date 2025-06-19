@@ -49,11 +49,9 @@ function WaitingRoom() {
 
   useEffect(() => {
     isMounted.current = true;
-    console.log('컴포넌트 마운트');
 
     return () => {
       isMounted.current = false;
-      console.log('컴포넌트 언마운트');
     };
   }, []);
 
@@ -67,8 +65,6 @@ function WaitingRoom() {
       setShowModal(true);
       return;
     }
-
-    console.log('게임 시작');
     socket.emit('startGame', { teamId });
   };
 
@@ -77,19 +73,14 @@ function WaitingRoom() {
   const exitTeam = async () => {
     try {
       if (socket && teamId && userId) {
-        console.log('방 나가기 소켓 실행');
         socket.emit('userLeft', { teamId, userId });
 
         await new Promise((resolve) => setTimeout(resolve, 200));
       }
 
-      console.log('서버에 퇴장 요청');
       await axios.patch(`${import.meta.env.VITE_BASE_URL}/teams/${userId}/users`);
-
-      console.log('게임 목록으로 이동');
       navigate('/joinGame');
     } catch (error) {
-      console.error('게임 방 나가기 실패', error);
       navigate('/joinGame');
     }
   };
@@ -98,16 +89,12 @@ function WaitingRoom() {
     if (!teamId) return;
 
     try {
-      console.log(`사용자 목록 새로고침 ${teamId}`);
       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/teams/${teamId}/users`);
-      console.log(`새 사용자 목록:`, response.data);
 
       if (isMounted.current) {
         const userData = Array.isArray(response.data.userTeam) ? response.data.userTeam : [];
         setUsers(userData); // 새로운 사용자 목록으로 업데이트
         setBackgroundImage(response.data.backgroundImage);
-      } else {
-        console.log('컴포넌트 언마운트');
       }
     } catch (error) {
       console.error('사용자 목록 새로고침 실패:', error);
@@ -119,7 +106,6 @@ function WaitingRoom() {
     if (!socket || !teamId || !userId) return;
 
     const handleGoToForbidden = () => {
-      console.log('모든 유저 /enterForbbiden 이동');
       navigate('/enterForbbiden');
     };
 
@@ -134,9 +120,7 @@ function WaitingRoom() {
     if (!socket || !teamId) return;
 
     const handleTeamDeleted = ({ teamId: deletedTeamId }: { teamId: number }) => {
-      console.log('팀 삭제됨:', deletedTeamId);
       if (deletedTeamId === teamId) {
-        console.log('현재 팀이 삭제되어 게임 목록으로 이동');
         navigate('/joinGame');
       }
     };
@@ -155,31 +139,25 @@ function WaitingRoom() {
   }, [teamId, refreshUsers]);
 
   useEffect(() => {
-    console.log(`소켓 useEffect 실행 socket ${!!socket} teamId ${teamId} userId ${userId}`);
-
     if (!socket || !teamId || !userId) {
-      console.log(`소켓 또는 teamId 또는 userId가 없어서 리턴`);
       return;
     }
 
     socket.emit('joinRoom', { teamId, userId });
 
     const handleUserJoined = (userData: WaitingRoomUser) => {
-      console.log(`userJoined`, userData);
       if (isMounted.current) {
         refreshUsers();
       }
     };
 
     const handleUserLeft = (userData: { userId: number }) => {
-      console.log('사용자 퇴장:', userData);
       if (isMounted.current) {
         refreshUsers();
       }
     };
 
     const handleUsersUpdated = (updatedUsers: WaitingRoomUser[]) => {
-      console.log('사용자 목록 업데이트:', updatedUsers);
       if (isMounted.current) {
         const userData = Array.isArray(updatedUsers) ? updatedUsers : [];
         setUsers(userData);
@@ -188,7 +166,6 @@ function WaitingRoom() {
 
 
     const handleCharacterSelected = (data: { userId: number; characterId: number; character: string }) => {
-      console.log('캐릭터 선택', data);
       if (isMounted.current) {
         setUsers(prevUsers => {
           const safePrevUsers = Array.isArray(prevUsers) ? prevUsers : [];
@@ -202,7 +179,6 @@ function WaitingRoom() {
     };
 
     const handleConnect = () => {
-      console.log('소켓 재연결');
       if (isMounted.current) {
         socket.emit('joinRoom', { teamId, userId });
         refreshUsers();
@@ -257,17 +233,9 @@ function WaitingRoom() {
   });
 
   const handleArrowClick = () => {
-    console.log('뒤로가기');
     exitTeam();
     navigate('/joinGame');
   };
-
-  console.log('🎯 버튼 렌더링 정보:');
-  console.log('- userId:', userId);
-  console.log('- userId !== null:', userId !== null);
-  console.log('- isLeader:', isLeader);
-  console.log('- currentUser?.isLeader:', currentUser?.isLeader);
-  console.log('- currentUser?.isReady:', currentUser?.isReady);
 
   return (
     <div className={styles.background}>

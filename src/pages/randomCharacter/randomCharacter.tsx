@@ -30,7 +30,6 @@ function RandomCharacter() {
     const fetchImageData = async () => {
       try {
         if (!userId) {
-          console.log("userId가 없음");
           return;
         }
 
@@ -71,7 +70,6 @@ function RandomCharacter() {
           }}
           style={{ width: "350px", height: "350px", objectFit: "cover" }}
           onError={() => {
-            console.log("이미지 로드 실패");
             setShowImage(false);
           }}
         />

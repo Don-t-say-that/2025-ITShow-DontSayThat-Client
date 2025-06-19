@@ -21,11 +21,9 @@ const useWaitingRoomStore = create<WaitingRoomState>((set) => ({
   users: [],
   setUsers: (users) => set({ users }),
   updateUserReady: (userId, isReady) => set((state) => {
-    console.log('updateUserReady 호출 전 users:', state.users);
     const updatedUsers = state.users.map(user =>
       user.id === userId ? { ...user, isReady } : user
     );
-    console.log('updateUserReady 호출 후 users:', updatedUsers);
     return { users: updatedUsers };
   }),
 }));

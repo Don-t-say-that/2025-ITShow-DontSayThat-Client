@@ -43,7 +43,6 @@ function RegisterUser() {
       if (response.status === 201) {
         setUserId(response.data.id);
         const userId = response.data.id;
-        console.log("regsterUser", userId);
 
         if (mode === 'join') {
           if (roomId) {

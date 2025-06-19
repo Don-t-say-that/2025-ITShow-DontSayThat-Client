@@ -57,7 +57,6 @@ function EnterForbbiden() {
 
     useEffect(() => {
         socket.on('allUsersReady', () => {
-            console.log("모든 사용자가 준비 완료되었습니다.");
             setAllUsersReady(true);
             setTimeout(() => {
                 navigate('/chatGame');
@@ -65,7 +64,6 @@ function EnterForbbiden() {
         });
 
         socket.on('readyStatus', (data) => {
-            console.log("준비 상태 업데이트:", data);
             setReadyUsers(data.readyUsers || []);
         });
 

@@ -27,7 +27,6 @@ function CreateRoom() {
 
   const handleCreateRoom = async () => {
     if (!userId) {
-      console.error('유저가 로그인되지 않았습니다.');
       return;
     }
 
@@ -38,7 +37,6 @@ function CreateRoom() {
       });
 
       const createdTeam = response.data;
-      console.log('생성된 팀:', createdTeam);
       setTeamId(createdTeam.id);
       // navigate('/waitingRoom');
       navigate('/gameDescription');
