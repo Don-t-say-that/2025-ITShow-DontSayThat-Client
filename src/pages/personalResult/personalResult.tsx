@@ -5,7 +5,12 @@ import useRoomStore from "../../store/roomStore";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import useUserStore from "../../store/userStore";
 import useRegisterStore from "../../store/registerStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
+
+import bg1 from "../../assets/Image/gameBackground/gameBg1.png";
+import bg2 from "../../assets/Image/gameBackground/gameBg2.png";
+import bg3 from "../../assets/Image/gameBackground/gameBg3.png";
+import bg4 from "../../assets/Image/gameBackground/gameBg4.png";
 
 function PersonalResult() {
   const { showModal, setShowModal } = useModalStore();
@@ -15,11 +20,11 @@ function PersonalResult() {
   const name = useRegisterStore((state) => state.name);
   const navigate = useNavigate();
 
-  const bgMap: Record<string, string> = {
-    gameBg1: "/gameBackground/gameBg1.png",
-    gameBg2: "/gameBackground/gameBg2.png",
-    gameBg3: "/gameBackground/gameBg3.png",
-    gameBg4: "/gameBackground/gameBg4.png",
+  const bgMap: { [key: string]: string } = {
+    gameBg1: bg1,
+    gameBg2: bg2,
+    gameBg3: bg3,
+    gameBg4: bg4,
   };
 
   const backgroundImage = bgMap[backgroundImageKey || "gameBg1"];
