@@ -43,7 +43,7 @@ const useRoomStore = create<RoomState>()(
       setBackgroundImage: (bg) => set({ backgroundImage: bg }),
     }),
     {
-      name: "room-storage",
+      name: "room-storage", // localStorage에 저장될 키 이름
     }
   )
 );

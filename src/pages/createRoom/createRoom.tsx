@@ -38,6 +38,7 @@ function CreateRoom() {
 
       const createdTeam = response.data;
       setTeamId(createdTeam.id);
+      // navigate('/waitingRoom');
       navigate('/gameDescription');
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
