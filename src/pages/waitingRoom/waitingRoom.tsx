@@ -59,7 +59,7 @@ function WaitingRoom() {
   const handleStartGame = () => {
     if (!socket || !teamId) return;
 
-    const activeUsersCount = safeUsers.filter(user => user.name !== '').length; // 현재 사용자 수
+    const activeUsersCount = safeUsers.filter(user => user.name !== '').length;
 
     if (activeUsersCount <= 1) {
       setShowModal(true);
@@ -93,7 +93,7 @@ function WaitingRoom() {
 
       if (isMounted.current) {
         const userData = Array.isArray(response.data.userTeam) ? response.data.userTeam : [];
-        setUsers(userData); // 새로운 사용자 목록으로 업데이트
+        setUsers(userData);
         setBackgroundImage(response.data.backgroundImage);
       }
     } catch (error) {

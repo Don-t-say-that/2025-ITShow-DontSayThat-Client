@@ -26,7 +26,7 @@ export const useMultiplayerStore = create<MultiplayerStore>((set) => ({
   updatePlayer(data) {
     set((state) => {
       const players = { ...state.players };
-      players[data.id] = { ...players[data.id], ...data }; // 덮어쓰기
+      players[data.id] = { ...players[data.id], ...data };
       return { players };
     });
   },

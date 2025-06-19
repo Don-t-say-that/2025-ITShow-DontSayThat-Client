@@ -8,7 +8,7 @@ export function usePlayerMovementListener() {
     socket.on("player-moved", (data) => {
 
       useMultiplayerStore.getState().updatePlayer({
-        ...data,    // id, x, y, imageUrl, nickName
+        ...data,
         message: data.message ?? "",
       });
     });

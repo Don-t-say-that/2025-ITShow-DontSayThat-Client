@@ -4,7 +4,6 @@ import { socket } from "../../sockets/socket";
 import { useMultiplayerStore } from "../../store/multiplayerStore";
 import useRoomStore from "../../store/roomStore";
 
-// socket 연결 등 로직 처리 컴포넌트
 function CharacterController({ playerId }: { playerId: string }) {
   const { x, y, setPosition, imgUrl } = useCharacterStore();
   const setMyPlayerId = useMultiplayerStore((state) => state.setMyPlayerId);

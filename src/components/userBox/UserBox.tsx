@@ -9,7 +9,7 @@ interface WaitingRoomUser {
 }
 
 interface UserBoxProps {
-    user?: WaitingRoomUser; // user를 선택적 속성으로 변경
+    user?: WaitingRoomUser;
     isEmpty: boolean;
     boxIndex: number;
 }
