@@ -134,7 +134,7 @@ function ChatGame() {
       }
 
       gameEndProcessedRef.current = true;
-      alert("게임이 종료되었습니다!");
+      console.log("게임 종료 이벤트 수신");
       handleFinishedGame();
     };
 
