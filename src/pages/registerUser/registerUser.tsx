@@ -1,21 +1,21 @@
-import { useEffect } from 'react';
-import useRegisterStore from '../../store/registerStore';
-import useUserStore from '../../store/userStore';
-import useNavigationStore from '../../store/navigationStore';
-import useModalStore from '../../store/ModalStore';
-import useRoomStore from '../../store/roomStore';
-import styles from './registerUser.module.css';
-import TextInput from '../../components/textInput/TextInput';
-import ActionButton from '../../components/ActionButton/ActionButton';
-import Modal from '../../components/Modal/Modal';
-import '../../App.css';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { SlArrowLeft } from 'react-icons/sl';
+import { useEffect, useState } from "react";
+import useRegisterStore from "../../store/registerStore";
+import useUserStore from "../../store/userStore";
+import useNavigationStore from "../../store/navigationStore";
+import useModalStore from "../../store/ModalStore";
+import useRoomStore from "../../store/roomStore";
+import styles from "./registerUser.module.css";
+import TextInput from "../../components/textInput/TextInput";
+import ActionButton from "../../components/ActionButton/ActionButton";
+import Modal from "../../components/Modal/Modal";
+import "../../App.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { SlArrowLeft } from "react-icons/sl";
 
 function RegisterUser() {
-
   const { name, password, setName, setPassword } = useRegisterStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { showModal, setShowModal } = useModalStore();
   const navigate = useNavigate();
   const { setUserId } = useUserStore();
@@ -23,7 +23,7 @@ function RegisterUser() {
   const roomId = useRoomStore((state) => state.teamId);
 
   useEffect(() => {
-    setName('');
+    setName("");
   }, [setName]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,54 +32,68 @@ function RegisterUser() {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-  }
+  };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return; // 이미 제출 중이면 중단
+    setIsSubmitting(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users`, {
-        name,
-        password,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users`,
+        {
+          name,
+          password,
+        }
+      );
 
       if (response.status === 201) {
         setUserId(response.data.id);
         const userId = response.data.id;
 
-        if (mode === 'join') {
+        if (mode === "join") {
           if (roomId) {
-            await axios.patch(`${import.meta.env.VITE_BASE_URL}/users/${userId}/team`, {
-              teamId: Number(roomId),
-            });
+            await axios.patch(
+              `${import.meta.env.VITE_BASE_URL}/users/${userId}/team`,
+              {
+                teamId: Number(roomId),
+              }
+            );
           }
         }
 
-        if (mode === 'join') {
-          navigate('/gameDescription');
-        }
-        else if (mode === 'create') {
-          navigate('/createRoom');
+        if (mode === "join") {
+          navigate("/gameDescription");
+        } else if (mode === "create") {
+          navigate("/createRoom");
         }
       }
-
     } catch (error: any) {
       if (error.response?.status === 400) {
         setShowModal(true);
       } else {
-        console.error('사용자 등록 에러', error);
+        console.error("사용자 등록 에러", error);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleArrowClick = () => {
-    navigate('/joinGame');
+    navigate("/joinGame");
   };
 
   return (
     <>
       <div className={styles.background}>
         <div>
-          <SlArrowLeft size={'2.6vw'} color='white' fontWeight={50} onClick={handleArrowClick} className={styles.arrow}/>
-          </div>
+          <SlArrowLeft
+            size={"2.6vw"}
+            color="white"
+            fontWeight={50}
+            onClick={handleArrowClick}
+            className={styles.arrow}
+          />
+        </div>
         <p className={styles.title}>사용자 등록하기</p>
 
         <div className={styles.inputContainer}>
@@ -96,12 +110,14 @@ function RegisterUser() {
         </div>
 
         <div className={styles.buttonContainer}>
-          <ActionButton onClick={handleSubmit}>완료</ActionButton>
+          <ActionButton onClick={handleSubmit} disabled={isSubmitting}>
+            {isSubmitting ? "처리 중..." : "완료"}
+          </ActionButton>
         </div>
 
         {showModal && (
           <Modal onClick={() => setShowModal(false)}>
-            중복된 사용자입니다.  <br />
+            중복된 사용자입니다. <br />
             새로운 닉네임을 입력해주세요.
           </Modal>
         )}
